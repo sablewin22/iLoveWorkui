@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --page-accent-r: 249;
+    --page-accent-g: 115;
+    --page-accent-b: 22;
+  }
+
+  [data-page="curriculo"] {
+    --page-accent-r: 239;
+    --page-accent-g: 68;
+    --page-accent-b: 68;
+  }
+
+  [data-page="diretrizes"] {
+    --page-accent-r: 234;
+    --page-accent-g: 179;
+    --page-accent-b: 8;
+  }
+
+  [data-page="contrato"] {
+    --page-accent-r: 236;
+    --page-accent-g: 72;
+    --page-accent-b: 153;
+  }
+
+  [data-page="criador"] {
+    --page-accent-r: 168;
+    --page-accent-g: 85;
+    --page-accent-b: 247;
+  }
+
+  [data-page="comparador"] {
+    --page-accent-r: 59;
+    --page-accent-g: 130;
+    --page-accent-b: 246;
+  }
+
+  [data-page="email"] {
+    --page-accent-r: 34;
+    --page-accent-g: 197;
+    --page-accent-b: 94;
+  }
+
+  body {
+    @apply bg-primary text-light font-body;
+  }
+
+  ::selection {
+    background: rgba(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b), 0.2);
+    color: #1A1A1A;
+  }
+}
+
+@layer components {
+  .card-surface {
+    @apply bg-white border border-black/10 rounded-xl p-6 shadow-sm hover:shadow-md transition-all;
+  }
+
+  .btn-accent {
+    background: rgb(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b));
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .btn-accent:hover:not(:disabled) {
+    background: rgba(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b), 0.8);
+  }
+
+  .btn-accent:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-ghost {
+    @apply border border-black/10 hover:bg-black/5 text-light/80 px-4 py-2 rounded-xl transition-all duration-200;
+  }
+
+  .input-field {
+    width: 100%;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: #1A1A1A;
+    transition: all 0.2s;
+  }
+
+  .input-field::placeholder {
+    color: #9CA3AF;
+  }
+
+  .input-field:focus {
+    outline: none;
+    border-color: rgba(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b), 0.5);
+    box-shadow: 0 0 0 1px rgba(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b), 0.3);
+  }
+
+  .tool-container {
+    @apply max-w-4xl mx-auto px-4 py-8 animate-fadeIn;
+  }
+
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-md border border-black/10 shadow-sm;
+  }
+}
+
+@layer utilities {
+  .bg-accent\/5 { background-color: rgba(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b), 0.05); }
+  .bg-accent\/10 { background-color: rgba(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b), 0.1); }
+  .text-accent\/90 { color: rgba(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b), 0.9); }
+  .border-accent\/10 { border-color: rgba(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b), 0.1); }
+  .border-accent\/20 { border-color: rgba(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b), 0.2); }
+  .from-accent\/\[0\.03\] {
+    --tw-gradient-from: rgba(var(--page-accent-r), var(--page-accent-g), var(--page-accent-b), 0.03);
+    --tw-gradient-to: transparent;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+
+  .toolcard-icon-bg {
+    background-color: color-mix(in srgb, var(--card-color) 10%, transparent);
+    transition: background-color 0.3s;
+  }
+  .toolcard-icon-bg:hover {
+    background-color: color-mix(in srgb, var(--card-color) 20%, transparent);
+  }
+
+  .toolcard-title {
+    transition: color 0.3s;
+  }
+  .toolcard-hover:hover .toolcard-title {
+    color: var(--card-color);
+  }
+
+  .toolcard-hover {
+    border-color: rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .toolcard-hover:hover {
+    border-color: color-mix(in srgb, var(--card-color) 30%, transparent);
+    box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--card-color) 5%, transparent), 0 4px 6px -4px color-mix(in srgb, var(--card-color) 5%, transparent);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.4s ease-in-out infinite both;
+}
+
+.delay-200 { animation-delay: 0.2s; }
+.delay-400 { animation-delay: 0.4s; }
