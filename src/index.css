@@ -16,9 +16,9 @@
   }
 
   [data-page="diretrizes"] {
-    --page-accent-r: 234;
-    --page-accent-g: 179;
-    --page-accent-b: 8;
+    --page-accent-r: 245;
+    --page-accent-g: 158;
+    --page-accent-b: 11;
   }
 
   [data-page="contrato"] {
@@ -46,21 +46,21 @@
   }
 
   [data-page="rescisao"] {
-    --page-accent-r: 245;
-    --page-accent-g: 158;
-    --page-accent-b: 11;
+    --page-accent-r: 249;
+    --page-accent-g: 115;
+    --page-accent-b: 22;
   }
 
   [data-page="tradutor"] {
-    --page-accent-r: 139;
-    --page-accent-g: 92;
-    --page-accent-b: 246;
+    --page-accent-r: 6;
+    --page-accent-g: 182;
+    --page-accent-b: 212;
   }
 
   [data-page="ata"] {
-    --page-accent-r: 14;
-    --page-accent-g: 165;
-    --page-accent-b: 233;
+    --page-accent-r: 99;
+    --page-accent-g: 102;
+    --page-accent-b: 241;
   }
 
   [data-page="dados"] {
@@ -70,8 +70,8 @@
   }
 
   [data-page="politica"] {
-    --page-accent-r: 249;
-    --page-accent-g: 115;
+    --page-accent-r: 132;
+    --page-accent-g: 204;
     --page-accent-b: 22;
   }
 

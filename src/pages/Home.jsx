@@ -14,7 +14,7 @@ const tools = [
     title: "Analisador de Diretrizes",
     description: "Analise políticas internas, regulamentos e manuais com recomendações de compliance.",
     path: "/analisador-diretrizes",
-    color: "#EAB308",
+    color: "#F59E0B",
   },
   {
     icon: Scale,
@@ -49,21 +49,21 @@ const tools = [
     title: "Simulador de Rescisão Trabalhista",
     description: "Calcule valores estimados de rescisão trabalhista com base no salário, tempo de empresa e motivo do desligamento.",
     path: "/simulador-rescisao",
-    color: "#F59E0B",
+    color: "#F97316",
   },
   {
     icon: Languages,
     title: "Tradutor Jurídico",
     description: "Converta textos jurídicos complexos em linguagem simples ou transforme linguagem comum em formato jurídico formal.",
     path: "/tradutor-juridico",
-    color: "#8B5CF6",
+    color: "#06B6D4",
   },
   {
     icon: NotebookPen,
     title: "Gerador de Ata de Reunião",
     description: "Transforme anotações e transcrições em atas profissionais organizadas com participantes, decisões e próximos passos.",
     path: "/gerador-ata",
-    color: "#0EA5E9",
+    color: "#6366F1",
   },
   {
     icon: BarChart3,
@@ -77,7 +77,7 @@ const tools = [
     title: "Criador de Política Interna",
     description: "Crie documentos internos personalizados para sua empresa com regras, responsabilidades e procedimentos.",
     path: "/criador-politica",
-    color: "#F97316",
+    color: "#84CC16",
   },
 ];
 

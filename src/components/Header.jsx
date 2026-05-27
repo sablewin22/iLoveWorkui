@@ -35,12 +35,12 @@ export default function Header() {
           iLoveWork
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-0 overflow-x-auto flex-nowrap">
           {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
-              className={`px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
+              className={`px-2 py-2 rounded-lg text-[12px] font-medium transition-colors whitespace-nowrap ${
                 location.pathname === link.path
                   ? "text-accent bg-accent/10"
                   : "text-light/70 hover:text-light hover:bg-white/5"
@@ -52,28 +52,30 @@ export default function Header() {
           <div className="relative">
             <button
               onClick={() => setExtraOpen(!extraOpen)}
-              onBlur={() => setTimeout(() => setExtraOpen(false), 200)}
-              className="flex items-center gap-1 px-3 py-2 rounded-lg text-[13px] font-medium text-light/70 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap"
+              className="flex items-center gap-1 px-2 py-2 rounded-lg text-[12px] font-medium text-light/70 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap"
             >
               Veja mais opções <ChevronDown className={`w-3.5 h-3.5 transition-transform ${extraOpen ? "rotate-180" : ""}`} />
             </button>
             {extraOpen && (
-              <div className="absolute right-0 top-full mt-1 w-56 glass-effect border border-black/10 rounded-xl shadow-lg py-2 animate-fadeIn">
-                {extraLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => setExtraOpen(false)}
-                    className={`block px-4 py-2 text-sm transition-colors ${
-                      location.pathname === link.path
-                        ? "text-accent bg-accent/10"
-                        : "text-light/70 hover:text-light hover:bg-black/5"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+              <>
+                <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setExtraOpen(false)} />
+                <div className="absolute right-0 top-full mt-1 w-56 glass-effect border border-black/10 rounded-xl shadow-lg py-2 z-50 animate-fadeIn">
+                  {extraLinks.map((link) => (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      onClick={() => setExtraOpen(false)}
+                      className={`block px-4 py-2 text-sm transition-colors ${
+                        location.pathname === link.path
+                          ? "text-accent bg-accent/10"
+                          : "text-light/70 hover:text-light hover:bg-black/5"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </nav>
