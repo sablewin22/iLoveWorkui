@@ -1,4 +1,4 @@
-import { FileSearch, Scale, FileEdit, ClipboardCheck, GitCompare, Mail } from "lucide-react";
+import { FileSearch, Scale, FileEdit, ClipboardCheck, GitCompare, Mail, Calculator, Languages, NotebookPen, BarChart3, Building2 } from "lucide-react";
 import ToolCard from "../components/ToolCard";
 
 const tools = [
@@ -43,6 +43,41 @@ const tools = [
     description: "Crie e-mails corporativos eficazes para qualquer situação profissional.",
     path: "/gerador-email",
     color: "#22C55E",
+  },
+  {
+    icon: Calculator,
+    title: "Simulador de Rescisão Trabalhista",
+    description: "Calcule valores estimados de rescisão trabalhista com base no salário, tempo de empresa e motivo do desligamento.",
+    path: "/simulador-rescisao",
+    color: "#F59E0B",
+  },
+  {
+    icon: Languages,
+    title: "Tradutor Jurídico",
+    description: "Converta textos jurídicos complexos em linguagem simples ou transforme linguagem comum em formato jurídico formal.",
+    path: "/tradutor-juridico",
+    color: "#8B5CF6",
+  },
+  {
+    icon: NotebookPen,
+    title: "Gerador de Ata de Reunião",
+    description: "Transforme anotações e transcrições em atas profissionais organizadas com participantes, decisões e próximos passos.",
+    path: "/gerador-ata",
+    color: "#0EA5E9",
+  },
+  {
+    icon: BarChart3,
+    title: "Analisador de Dados Empresariais",
+    description: "Analise informações empresariais para identificar padrões, tendências, riscos e oportunidades estratégicas.",
+    path: "/analisador-dados",
+    color: "#10B981",
+  },
+  {
+    icon: Building2,
+    title: "Criador de Política Interna",
+    description: "Crie documentos internos personalizados para sua empresa com regras, responsabilidades e procedimentos.",
+    path: "/criador-politica",
+    color: "#F97316",
   },
 ];
 

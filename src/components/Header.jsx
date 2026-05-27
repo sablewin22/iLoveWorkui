@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Briefcase, Menu, X } from "lucide-react";
+import { Briefcase, Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 const navLinks = [
@@ -11,8 +11,17 @@ const navLinks = [
   { label: "Gerador de E-mail", path: "/gerador-email" },
 ];
 
+const extraLinks = [
+  { label: "Simulador de Rescisão", path: "/simulador-rescisao" },
+  { label: "Tradutor Jurídico", path: "/tradutor-juridico" },
+  { label: "Gerador de Ata", path: "/gerador-ata" },
+  { label: "Analisador de Dados", path: "/analisador-dados" },
+  { label: "Criador de Política Interna", path: "/criador-politica" },
+];
+
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [extraOpen, setExtraOpen] = useState(false);
   const location = useLocation();
 
   return (
@@ -27,7 +36,7 @@ export default function Header() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
-          {navLinks.slice(0, 6).map((link) => (
+          {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
@@ -40,6 +49,33 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
+          <div className="relative">
+            <button
+              onClick={() => setExtraOpen(!extraOpen)}
+              onBlur={() => setTimeout(() => setExtraOpen(false), 200)}
+              className="flex items-center gap-1 px-3 py-2 rounded-lg text-[13px] font-medium text-light/70 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap"
+            >
+              Veja mais opções <ChevronDown className={`w-3.5 h-3.5 transition-transform ${extraOpen ? "rotate-180" : ""}`} />
+            </button>
+            {extraOpen && (
+              <div className="absolute right-0 top-full mt-1 w-56 glass-effect border border-black/10 rounded-xl shadow-lg py-2 animate-fadeIn">
+                {extraLinks.map((link) => (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    onClick={() => setExtraOpen(false)}
+                    className={`block px-4 py-2 text-sm transition-colors ${
+                      location.pathname === link.path
+                        ? "text-accent bg-accent/10"
+                        : "text-light/70 hover:text-light hover:bg-black/5"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </nav>
 
         <div className="flex items-center gap-1">
@@ -57,6 +93,22 @@ export default function Header() {
         <div className="lg:hidden glass-effect border-t border-black/5 max-h-[70vh] overflow-y-auto">
           <div className="px-4 py-2 space-y-1">
             {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={() => setOpen(false)}
+                className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
+                  location.pathname === link.path
+                    ? "text-accent bg-accent/10"
+                    : "text-light/70 hover:text-light hover:bg-black/5"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div className="border-t border-black/5 my-2" />
+            <p className="px-3 py-1 text-xs font-medium text-light/40 uppercase tracking-wider">Veja mais opções</p>
+            {extraLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}

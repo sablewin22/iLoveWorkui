@@ -45,6 +45,36 @@
     --page-accent-b: 94;
   }
 
+  [data-page="rescisao"] {
+    --page-accent-r: 245;
+    --page-accent-g: 158;
+    --page-accent-b: 11;
+  }
+
+  [data-page="tradutor"] {
+    --page-accent-r: 139;
+    --page-accent-g: 92;
+    --page-accent-b: 246;
+  }
+
+  [data-page="ata"] {
+    --page-accent-r: 14;
+    --page-accent-g: 165;
+    --page-accent-b: 233;
+  }
+
+  [data-page="dados"] {
+    --page-accent-r: 16;
+    --page-accent-g: 185;
+    --page-accent-b: 129;
+  }
+
+  [data-page="politica"] {
+    --page-accent-r: 249;
+    --page-accent-g: 115;
+    --page-accent-b: 22;
+  }
+
   body {
     @apply bg-primary text-light font-body;
   }
