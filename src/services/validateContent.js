@@ -8,7 +8,10 @@ const rules = {
     mismatches: [
       "cláusula", "clausula", "foro", "rescisão", "rescisao", "vigência", "vigencia",
       "contratante", "contratado", "faturamento", "receita", "lucro",
-      "ata de reunião", "pauta", "compliance", "diretriz", "política interna",
+      "ata de reunião", "pauta", "reunião", "participante", "discussão",
+      "compliance", "diretriz", "política interna", "política", "norma",
+      "procedimento", "regulamento", "conduta", "manual",
+      "balanço", "indicador", "dívida", "financeiro",
     ],
     suggestion: "Analisador de Currículo",
     suggestionPath: "/analisador-curriculo",
@@ -21,6 +24,10 @@ const rules = {
     mismatches: [
       "currículo", "curriculo", "experiência", "experiencia",
       "ata de reunião", "pauta", "reunião", "faturamento", "receita",
+      "política", "compliance", "diretriz", "norma", "regulamento",
+      "conduta", "manual", "procedimento",
+      "lucro", "balanço", "indicador",
+      "participante", "discussão", "deliberação",
     ],
     suggestion: "Tradutor Jurídico",
     suggestionPath: "/tradutor-juridico",
@@ -35,6 +42,8 @@ const rules = {
       "currículo", "curriculo", "habilidade", "cargo", "graduação", "graduacao",
       "faturamento", "receita", "ata de reunião", "pauta", "política", "diretriz",
       "compliance", "regulamento", "conduta", "manual", "norma", "procedimento",
+      "lucro", "balanço", "indicador", "dívida",
+      "reunião", "participante", "discussão",
     ],
     suggestion: "Analisador de Contrato",
     suggestionPath: "/analisador-contrato",
@@ -48,7 +57,8 @@ const rules = {
     mismatches: [
       "cláusula", "foro", "contratante", "currículo", "curriculo",
       "experiência", "experiencia", "faturamento", "receita", "lucro",
-      "ata de reunião", "pauta", "participante",
+      "ata de reunião", "pauta", "participante", "reunião", "discussão",
+      "balanço", "indicador", "dívida",
     ],
     suggestion: "Analisador de Diretrizes",
     suggestionPath: "/analisador-diretrizes",
@@ -63,6 +73,7 @@ const rules = {
       "cláusula", "foro", "contratante", "currículo", "curriculo",
       "faturamento", "receita", "lucro", "experiência", "experiencia",
       "política", "compliance", "balanço", "indicador",
+      "diretriz", "norma", "regulamento",
     ],
     suggestion: "Gerador de Ata de Reunião",
     suggestionPath: "/gerador-ata",
@@ -77,21 +88,10 @@ const rules = {
       "cláusula", "foro", "currículo", "curriculo", "experiência", "experiencia",
       "ata de reunião", "reunião", "política", "compliance",
       "pauta", "participante", "discussão", "deliberação", "encaminhamento",
+      "diretriz", "norma", "regulamento", "conduta",
     ],
     suggestion: "Analisador de Dados Empresariais",
     suggestionPath: "/analisador-dados-empresariais",
-  },
-  tradutor: {
-    matches: [
-      "cláusula", "clausula", "foro", "jurídico", "juridico",
-      "advogado", "legal", "contrato", "direito",
-    ],
-    mismatches: [
-      "currículo", "curriculo", "experiência", "experiencia",
-      "ata de reunião", "pauta", "reunião", "faturamento", "receita",
-    ],
-    suggestion: "Tradutor Jurídico",
-    suggestionPath: "/tradutor-juridico",
   },
 };
 
