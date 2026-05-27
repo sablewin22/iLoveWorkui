@@ -15,6 +15,9 @@ async function callApi(endpoint, body) {
 
 export async function callClaude(systemPrompt, userContent, replacements = {}) {
   const modeMap = {
+    "analyze o currículo": "curriculo",
+    "analise o currículo": "curriculo",
+    "currículo": "curriculo",
     curriculo: "curriculo",
     contratual: "contrato",
     "redija um contrato": "criar_contrato",
@@ -23,7 +26,8 @@ export async function callClaude(systemPrompt, userContent, replacements = {}) {
     corporativa: "gerar_email",
     rescisao: "rescisao",
     tradutor: "tradutor",
-    ata: "ata",
+    "ata de reunião": "ata",
+    "anotações da reunião": "ata",
     "dados empresariais": "dados empresariais",
     "politica interna": "politica interna",
   };
