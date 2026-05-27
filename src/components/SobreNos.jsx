@@ -17,7 +17,7 @@ export default function SobreNos() {
 
       {open && (
         <>
-          <div className="fixed inset-0 z-30 bg-black/30" onClick={() => setOpen(false)} />
+          <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
           <div className="fixed right-4 top-20 z-40 w-80 bg-white border border-black/10 rounded-xl shadow-lg p-6 animate-fadeIn">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-title font-semibold text-lg text-light">Sobre o iLoveWork</h3>
