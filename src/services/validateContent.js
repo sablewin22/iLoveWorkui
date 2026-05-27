@@ -13,6 +13,18 @@ const rules = {
     suggestion: "Analisador de Currículo",
     suggestionPath: "/analisador-curriculo",
   },
+  tradutor: {
+    matches: [
+      "cláusula", "clausula", "foro", "jurídico", "juridico",
+      "advogado", "legal", "contrato", "direito",
+    ],
+    mismatches: [
+      "currículo", "curriculo", "experiência", "experiencia",
+      "ata de reunião", "pauta", "reunião", "faturamento", "receita",
+    ],
+    suggestion: "Tradutor Jurídico",
+    suggestionPath: "/tradutor-juridico",
+  },
   contrato: {
     matches: [
       "cláusula", "clausula", "contratante", "contratado", "foro",
@@ -68,6 +80,18 @@ const rules = {
     ],
     suggestion: "Analisador de Dados Empresariais",
     suggestionPath: "/analisador-dados-empresariais",
+  },
+  tradutor: {
+    matches: [
+      "cláusula", "clausula", "foro", "jurídico", "juridico",
+      "advogado", "legal", "contrato", "direito",
+    ],
+    mismatches: [
+      "currículo", "curriculo", "experiência", "experiencia",
+      "ata de reunião", "pauta", "reunião", "faturamento", "receita",
+    ],
+    suggestion: "Tradutor Jurídico",
+    suggestionPath: "/tradutor-juridico",
   },
 };
 
