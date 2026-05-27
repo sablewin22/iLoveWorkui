@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, GitCompare, CheckCircle, Upload, Loader2 } from "lucide-react";
+import mammoth from "mammoth";
 import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -42,7 +43,6 @@ const FileUploadInline = ({ label, onTextExtracted }) => {
           text += content.items.map((item) => item.str).join(" ") + "\n";
         }
       } else if (ext === "docx") {
-        const mammoth = await import("mammoth");
         const result = await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
         text = result.value;
       }

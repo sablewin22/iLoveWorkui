@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { Upload, FileText, Loader2 } from "lucide-react";
+import mammoth from "mammoth";
 
 export default function FileUpload({ onFileContent }) {
   const [dragOver, setDragOver] = useState(false);
@@ -42,7 +43,6 @@ export default function FileUpload({ onFileContent }) {
         onFileContent(text);
         setExtracting(false);
       } else if (ext === "docx") {
-        const mammoth = await import("mammoth");
         const result = await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
         onFileContent(result.value);
         setExtracting(false);
@@ -50,6 +50,7 @@ export default function FileUpload({ onFileContent }) {
     } catch (err) {
       onFileContent(null, file.name);
       setExtracting(false);
+      console.error("File extraction error:", err);
     }
   };
 
