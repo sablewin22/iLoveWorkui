@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, GitCompare, CheckCircle, Upload, Loader2 } from "lucide-react";
-import mammoth from "mammoth";
+import { ArrowLeft, GitCompare, CheckCircle } from "lucide-react";
+import FileUpload from "../components/FileUpload";
 import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -18,76 +18,6 @@ function cleanResult(text) {
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
-
-const FileUploadInline = ({ label, onTextExtracted }) => {
-  const [fileName, setFileName] = useState(null);
-  const [extracting, setExtracting] = useState(false);
-  const [error, setError] = useState(null);
-  const inputRef = useRef(null);
-
-  const handleFile = async (file) => {
-    if (!file) return;
-    setFileName(file.name);
-    setExtracting(true);
-    setError(null);
-    const ext = file.name.split(".").pop().toLowerCase();
-    try {
-      let text = "";
-      if (ext === "pdf") {
-        const pdfjsLib = await import("pdfjs-dist");
-        pdfjsLib.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
-        const pdf = await pdfjsLib.getDocument(await file.arrayBuffer()).promise;
-        for (let i = 1; i <= pdf.numPages; i++) {
-          const page = await pdf.getPage(i);
-          const content = await page.getTextContent();
-          text += content.items.map((item) => item.str).join(" ") + "\n";
-        }
-      } else if (ext === "docx") {
-        const result = await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
-        text = result.value;
-      }
-      onTextExtracted(text);
-      setExtracting(false);
-    } catch {
-      setError("Erro ao extrair texto.");
-      setExtracting(false);
-    }
-  };
-
-  const handleDrop = (e) => { e.preventDefault(); const file = e.dataTransfer.files[0]; handleFile(file); };
-  const handleChange = (e) => { const file = e.target.files[0]; handleFile(file); };
-
-  return (
-    <div>
-      <div
-        onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add("border-accent", "bg-accent/5"); }}
-        onDragLeave={(e) => { e.currentTarget.classList.remove("border-accent", "bg-accent/5"); }}
-        onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}
-        className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-all border-black/10 hover:border-black/20"
-      >
-        <input ref={inputRef} type="file" accept=".pdf,.docx" onChange={handleChange} className="hidden" />
-        {extracting ? (
-          <div className="flex items-center justify-center gap-2 text-light/60">
-            <Loader2 className="w-4 h-4 animate-spin text-accent" />
-            <span className="text-xs">Extraindo...</span>
-          </div>
-        ) : fileName ? (
-          <div className="flex items-center justify-center gap-1.5 text-light/70">
-            <CheckCircle className="w-4 h-4 text-green-500" />
-            <span className="text-xs font-medium">{fileName}</span>
-          </div>
-        ) : (
-          <div>
-            <Upload className="w-5 h-5 mx-auto mb-1 text-light/40" />
-            <p className="text-light/50 text-xs">Upload {label}</p>
-          </div>
-        )}
-      </div>
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-    </div>
-  );
-};
 
 export default function ComparadorContratos() {
   const navigate = useNavigate();
@@ -136,7 +66,11 @@ export default function ComparadorContratos() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="space-y-3">
           <label className="block text-sm font-medium text-light/80">Versão Anterior</label>
-          <FileUploadInline label="PDF ou DOCX" onTextExtracted={(t) => { setVersaoAntiga(t); setOldUploaded(true); }} />
+          <FileUpload onFileContent={(content, fileName) => {
+            if (content === "" || (content === null && fileName)) return;
+            setVersaoAntiga(content);
+            setOldUploaded(true);
+          }} />
           {oldUploaded && (
             <div className="flex items-center gap-2 text-green-600 text-xs">
               <CheckCircle className="w-3.5 h-3.5" />
@@ -148,7 +82,11 @@ export default function ComparadorContratos() {
         </div>
         <div className="space-y-3">
           <label className="block text-sm font-medium text-light/80">Versão Nova</label>
-          <FileUploadInline label="PDF ou DOCX" onTextExtracted={(t) => { setVersaoNova(t); setNewUploaded(true); }} />
+          <FileUpload onFileContent={(content, fileName) => {
+            if (content === "" || (content === null && fileName)) return;
+            setVersaoNova(content);
+            setNewUploaded(true);
+          }} />
           {newUploaded && (
             <div className="flex items-center gap-2 text-green-600 text-xs">
               <CheckCircle className="w-3.5 h-3.5" />
