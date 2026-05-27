@@ -25,9 +25,7 @@ export default function Header() {
   const location = useLocation();
 
   return (
-    <>
-      {extraOpen && <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setExtraOpen(false)} />}
-      <header className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-black/5">
+    <header className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-black/5">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
           <Link
             to="/"
@@ -127,6 +125,5 @@ export default function Header() {
         </div>
       )}
     </header>
-    </>
   );
 }
