@@ -40,7 +40,7 @@ export default function Header() {
             <Link
               key={link.path}
               to={link.path}
-              className={`px-2 py-2 rounded-lg text-[12px] font-medium transition-colors whitespace-nowrap ${
+              className={`px-2 py-2 rounded-lg text-[13px] font-medium transition-colors whitespace-nowrap ${
                 location.pathname === link.path
                   ? "text-accent bg-accent/10"
                   : "text-light/70 hover:text-light hover:bg-white/5"
@@ -52,14 +52,14 @@ export default function Header() {
           <div className="relative">
             <button
               onClick={() => setExtraOpen(!extraOpen)}
-              className="flex items-center gap-1 px-2 py-2 rounded-lg text-[12px] font-medium text-light/70 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap"
+              className="flex items-center gap-1 px-2 py-2 rounded-lg text-[13px] font-medium text-light/70 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap"
             >
               Veja mais opções <ChevronDown className={`w-3.5 h-3.5 transition-transform ${extraOpen ? "rotate-180" : ""}`} />
             </button>
             {extraOpen && (
               <>
                 <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setExtraOpen(false)} />
-                <div className="absolute right-0 top-full mt-1 w-56 glass-effect border border-black/10 rounded-xl shadow-lg py-2 z-50 animate-fadeIn">
+                <div className="absolute right-0 top-full mt-1 w-56 bg-white border border-black/10 rounded-xl shadow-lg py-2 z-50 animate-fadeIn">
                   {extraLinks.map((link) => (
                     <Link
                       key={link.path}
