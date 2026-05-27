@@ -8,10 +8,10 @@ const navLinks = [
   { label: "Analisador de Contrato", path: "/analisador-contrato" },
   { label: "Criador de Contrato", path: "/criador-contrato" },
   { label: "Comparador de Contratos", path: "/comparador-contratos" },
-  { label: "Gerador de E-mail", path: "/gerador-email" },
 ];
 
 const extraLinks = [
+  { label: "Gerador de E-mail", path: "/gerador-email" },
   { label: "Simulador de Rescisão", path: "/simulador-rescisao" },
   { label: "Tradutor Jurídico", path: "/tradutor-juridico" },
   { label: "Gerador de Ata", path: "/gerador-ata" },
@@ -35,7 +35,7 @@ export default function Header() {
           iLoveWork
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-0 overflow-x-auto flex-nowrap">
+        <nav className="hidden lg:flex items-center gap-0 flex-nowrap">
           {navLinks.map((link) => (
             <Link
               key={link.path}
