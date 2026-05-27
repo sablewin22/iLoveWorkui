@@ -13,6 +13,7 @@ import TradutorJuridico from "./pages/TradutorJuridico";
 import GeradorAta from "./pages/GeradorAta";
 import AnalisadorDadosEmpresariais from "./pages/AnalisadorDadosEmpresariais";
 import CriadorPoliticaInterna from "./pages/CriadorPoliticaInterna";
+import SobreNos from "./components/SobreNos";
 
 export default function App() {
   const location = useLocation();
@@ -51,6 +52,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <SobreNos />
     </div>
   );
 }
