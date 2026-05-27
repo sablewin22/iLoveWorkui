@@ -9,7 +9,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { callClaude } from "../services/claudeApi";
 import { validateContent } from "../services/validateContent";
 
-const systemPrompt = "Você é um especialista em recrutamento. Analise o currículo e forneça: (1) Pontos fortes, (2) Gaps e pontos fracos, (3) Sugestões de melhoria, (4) Avaliação da formatação, (5) Nota 0-10. Ao final, gere uma **Versão Melhorada do Currículo** reescrita e otimizada. FORMATO: Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
+const systemPrompt = "Você é um especialista em recrutamento. Analise o currículo e forneça: (1) Pontos fortes, (2) Gaps e pontos fracos, (3) Sugestões de melhoria, (4) Avaliação da formatação, (5) Nota 0-10. Ao final, gere uma **Versão Melhorada do Currículo** reescrita e otimizada. REGRAS: Períodos com sobreposição de datas NÃO são gaps ou inconsistências — múltiplos empregos simultâneos são normais. Publicações em idioma diferente do currículo NÃO indicam proficiência extra nem inconsistência. FORMATO: Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
 
 function cleanResult(text) {
   return text

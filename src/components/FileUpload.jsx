@@ -33,7 +33,18 @@ export default function FileUpload({ onFileContent }) {
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
           const content = await page.getTextContent();
-          text += content.items.map((item) => item.str).join(" ") + "\n";
+          let lastY = null;
+          let line = "";
+          for (const item of content.items) {
+            const y = Math.round(item.transform[5]);
+            if (lastY !== null && Math.abs(y - lastY) > 3) {
+              text += line.trimEnd() + "\n";
+              line = "";
+            }
+            line += item.str + " ";
+            lastY = y;
+          }
+          text += line.trimEnd() + "\n";
         }
         onFileContent(text);
         setExtracting(false);
