@@ -98,7 +98,7 @@ export default function AnalisadorDiretrizes() {
       </div>
 
       {loading && <LoadingSpinner />}
-      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setText(""); setUploadedFile(null); setError(null); }} />}
+      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setText(""); setUploadedFile(null); setError(null); setTab("upload"); }} />}
     </div>
   );
 }
