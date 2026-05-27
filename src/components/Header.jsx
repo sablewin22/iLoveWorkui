@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Briefcase, Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import SobreNos from "./SobreNos";
 
 const navLinks = [
   { label: "Analisador de Currículo", path: "/analisador-curriculo" },
@@ -78,6 +79,7 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-1">
+          <SobreNos />
           <button
             onClick={() => setOpen(!open)}
             className="lg:hidden btn-ghost p-2"

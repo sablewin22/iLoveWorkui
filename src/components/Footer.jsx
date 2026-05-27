@@ -14,6 +14,9 @@ export default function Footer() {
         <p className="text-light/40 text-xs">
           Grupo: Alicia Pizoni, Giovanna Couto, Julia Cereja, Rebeca Bertozzi, Sabrina Azulay
         </p>
+        <p className="text-light/40 text-xs mt-1">
+          Orientador de projeto: Professor Matheus Pestana
+        </p>
       </div>
     </footer>
   );
