@@ -75,13 +75,14 @@ function score(text, wordList) {
 
 function findBestMatchingType(text, excludeToolId) {
   const lower = text.toLowerCase();
+  const excludeRule = rules[excludeToolId];
+  const activeMismatches = excludeRule.mismatches.filter(m => lower.includes(m));
+
   let bestType = null;
-  let bestScore = -Infinity;
+  let bestScore = 0;
   for (const [type, rule] of Object.entries(rules)) {
     if (type === excludeToolId) continue;
-    const matchScore = score(lower, rule.matches);
-    const mismatchScore = score(lower, rule.mismatches);
-    const s = matchScore - mismatchScore;
+    const s = activeMismatches.filter(m => rule.matches.includes(m)).length;
     if (s > bestScore) {
       bestScore = s;
       bestType = type;
