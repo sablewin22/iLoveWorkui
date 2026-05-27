@@ -20,6 +20,8 @@ const rules = {
     matches: [
       "cláusula", "clausula", "foro", "jurídico", "juridico",
       "advogado", "legal", "contrato", "direito",
+      "parecer", "sentença", "tribunal", "juiz", "artigo",
+      "lei", "código", "decisão judicial",
     ],
     mismatches: [
       "currículo", "curriculo", "experiência", "experiencia",
@@ -59,6 +61,7 @@ const rules = {
       "experiência", "experiencia", "faturamento", "receita", "lucro",
       "ata de reunião", "pauta", "participante", "reunião", "discussão",
       "balanço", "indicador", "dívida",
+      "jurídico", "advogado", "parecer", "sentença", "tribunal",
     ],
     suggestion: "Analisador de Diretrizes",
     suggestionPath: "/analisador-diretrizes",
