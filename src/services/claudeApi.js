@@ -25,11 +25,16 @@ export async function callClaude(systemPrompt, userContent, replacements = {}) {
     "compare as duas": "comparar_contratos",
     corporativa: "gerar_email",
     rescisao: "rescisao",
+    "rescisão": "rescisao",
+    "rescisórios": "rescisao",
     tradutor: "tradutor",
+    juridiquês: "tradutor",
     "ata de reunião": "ata",
     "anotações da reunião": "ata",
     "dados empresariais": "dados empresariais",
     "politica interna": "politica interna",
+    "política interna": "politica interna",
+    "políticas internas": "politica interna",
   };
 
   let mode = "curriculo";
