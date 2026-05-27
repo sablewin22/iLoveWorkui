@@ -5,6 +5,7 @@ import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { callClaude } from "../services/claudeApi";
+import { validateContent } from "../services/validateContent";
 
 const systemPrompt = "Você é um especialista em análise documental. Compare as duas versões do contrato. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
 
@@ -95,11 +96,17 @@ export default function ComparadorContratos() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [validation, setValidation] = useState(null);
   const [oldUploaded, setOldUploaded] = useState(false);
   const [newUploaded, setNewUploaded] = useState(false);
 
   const handleSubmit = async () => {
     if (!versaoAntiga.trim() || !versaoNova.trim()) return;
+    for (const t of [versaoAntiga, versaoNova]) {
+      const v = validateContent(t, "contrato");
+      if (v) { setValidation(v); return; }
+    }
+    setValidation(null);
     setLoading(true);
     setError(null);
     setResult(null);
@@ -153,6 +160,14 @@ export default function ComparadorContratos() {
         </div>
       </div>
 
+      {validation && (
+        <p className="text-amber-600 text-sm bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-4">
+          <span dangerouslySetInnerHTML={{ __html: validation.message }} />
+          {validation.suggestionPath && (
+            <button onClick={() => navigate(validation.suggestionPath)} className="underline font-medium ml-1">Ir para ferramenta</button>
+          )}
+        </p>
+      )}
       {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
       <button onClick={handleSubmit} disabled={!versaoAntiga.trim() || !versaoNova.trim() || loading} className="btn-accent w-full mb-8">
@@ -160,7 +175,7 @@ export default function ComparadorContratos() {
       </button>
 
       {loading && <LoadingSpinner />}
-      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setVersaoAntiga(""); setVersaoNova(""); setOldUploaded(false); setNewUploaded(false); setError(null); }} />}
+      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setVersaoAntiga(""); setVersaoNova(""); setOldUploaded(false); setNewUploaded(false); setError(null); setValidation(null); }} />}
     </div>
   );
 }

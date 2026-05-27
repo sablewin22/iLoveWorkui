@@ -7,6 +7,7 @@ import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { callClaude } from "../services/claudeApi";
+import { validateContent } from "../services/validateContent";
 
 function cleanResult(text) {
   return text
@@ -25,6 +26,7 @@ export default function TradutorJuridico() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [validation, setValidation] = useState(null);
 
   const handleFileContent = (content, fileName) => {
     if (content === "") {
@@ -33,6 +35,7 @@ export default function TradutorJuridico() {
       setResult(null);
       setLoading(false);
       setError(null);
+      setValidation(null);
       return;
     }
     if (content === null && fileName) {
@@ -42,10 +45,16 @@ export default function TradutorJuridico() {
     setText(content);
     setUploadedFile({ name: fileName, content });
     setError(null);
+    const v = validateContent(content, "contrato");
+    if (v) { setValidation(v); return; }
+    setValidation(null);
   };
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
+    const v = validateContent(text, "contrato");
+    if (v) { setValidation(v); return; }
+    setValidation(null);
     setLoading(true);
     setError(null);
     setResult(null);
@@ -67,6 +76,7 @@ export default function TradutorJuridico() {
     setText("");
     setUploadedFile(null);
     setError(null);
+    setValidation(null);
     setTab("upload");
   };
 
@@ -91,6 +101,14 @@ export default function TradutorJuridico() {
           <TextInput value={text} onChange={setText} placeholder="Cole o texto aqui..." />
         )}
 
+        {validation && (
+          <p className="text-amber-600 text-sm bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+            <span dangerouslySetInnerHTML={{ __html: validation.message }} />
+            {validation.suggestionPath && (
+              <button onClick={() => navigate(validation.suggestionPath)} className="underline font-medium ml-1">Ir para ferramenta</button>
+            )}
+          </p>
+        )}
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
         <button onClick={handleSubmit} disabled={!text.trim() || loading} className="btn-accent w-full">
