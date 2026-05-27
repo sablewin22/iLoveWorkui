@@ -22,6 +22,7 @@ const rules = {
     mismatches: [
       "currículo", "curriculo", "habilidade", "cargo", "graduação", "graduacao",
       "faturamento", "receita", "ata de reunião", "pauta", "política", "diretriz",
+      "compliance", "regulamento", "conduta", "manual", "norma", "procedimento",
     ],
     suggestion: "Analisador de Contrato",
     suggestionPath: "/analisador-contrato",

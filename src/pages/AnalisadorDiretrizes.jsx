@@ -44,12 +44,12 @@ export default function AnalisadorDiretrizes() {
       setError("Não foi possível extrair o texto do arquivo. Tente usar a aba 'Colar texto'.");
       return;
     }
-    setText(content);
-    setUploadedFile({ name: fileName, content });
     setError(null);
     const v = validateContent(content, "diretrizes");
     if (v) { setValidation(v); return; }
     setValidation(null);
+    setText(content);
+    setUploadedFile({ name: fileName, content });
   };
 
   const handleSubmit = async () => {

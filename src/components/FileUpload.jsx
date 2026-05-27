@@ -99,9 +99,17 @@ export default function FileUpload({ onFileContent }) {
             <span className="text-sm">Extraindo texto...</span>
           </div>
         ) : fileName ? (
-          <div className="flex items-center justify-center gap-2 text-light/80">
-            <FileText className="w-5 h-5 text-accent" />
-            <span className="text-sm">{fileName}</span>
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-center gap-2 text-light/80">
+              <FileText className="w-5 h-5 text-accent" />
+              <span className="text-sm font-medium">{fileName}</span>
+            </div>
+            <button
+              onClick={(e) => { e.stopPropagation(); setFileName(null); onFileContent(""); }}
+              className="text-red-500 hover:text-red-700 text-xs underline"
+            >
+              Remover arquivo
+            </button>
           </div>
         ) : (
           <div>
