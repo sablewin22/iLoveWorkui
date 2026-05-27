@@ -8,7 +8,7 @@ export default function SobreNos() {
     <>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-light/60 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap border border-black/5 hover:border-black/10"
+        className="fixed top-3.5 right-4 z-[60] flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-light/60 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap border border-black/5 hover:border-black/10"
         aria-label="Sobre nós"
       >
         <Info className="w-3.5 h-3.5" />
