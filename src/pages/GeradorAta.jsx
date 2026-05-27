@@ -59,7 +59,7 @@ export default function GeradorAta() {
     setError(null);
     setResult(null);
 
-    const systemPrompt = "Você é um especialista em documentação empresarial. Transforme as anotações fornecidas em uma ata de reunião profissional e organizada. Extraia participantes, tópicos, decisões e responsáveis. NÃO invente ou complete informações que não foram fornecidas — se um dado não estiver presente nas anotações, deixe um espaço em branco (______________________) para preenchimento manual. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
+    const systemPrompt = "Você é um especialista em documentação empresarial. Transforme as anotações fornecidas em uma ata de reunião profissional e organizada. Extraia participantes, tópicos, decisões e responsáveis. REGRAS ABSOLUTAS: (1) NÃO invente ou complete informações que não foram fornecidas. (2) Se um dado não estiver presente nas anotações, escreva exatamente \"______________________\" no lugar — NUNCA escreva \"não informado\", \"não especificado\", \"não consta\" ou qualquer variação disso. (3) Os únicos placeholders permitidos são ______________________. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
 
     try {
       const res = await callClaude(systemPrompt, text);
