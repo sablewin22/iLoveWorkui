@@ -35,7 +35,8 @@ const rules = {
     ],
     mismatches: [
       "cláusula", "foro", "contratante", "currículo", "curriculo",
-      "experiência", "experiencia", "faturamento", "receita", "ata de reunião",
+      "experiência", "experiencia", "faturamento", "receita", "lucro",
+      "ata de reunião", "pauta", "participante",
     ],
     suggestion: "Analisador de Diretrizes",
     suggestionPath: "/analisador-diretrizes",
@@ -48,7 +49,8 @@ const rules = {
     ],
     mismatches: [
       "cláusula", "foro", "contratante", "currículo", "curriculo",
-      "faturamento", "experiência", "experiencia", "política", "compliance",
+      "faturamento", "receita", "lucro", "experiência", "experiencia",
+      "política", "compliance", "balanço", "indicador",
     ],
     suggestion: "Gerador de Ata de Reunião",
     suggestionPath: "/gerador-ata",
@@ -62,6 +64,7 @@ const rules = {
     mismatches: [
       "cláusula", "foro", "currículo", "curriculo", "experiência", "experiencia",
       "ata de reunião", "reunião", "política", "compliance",
+      "pauta", "participante", "discussão", "deliberação", "encaminhamento",
     ],
     suggestion: "Analisador de Dados Empresariais",
     suggestionPath: "/analisador-dados-empresariais",
@@ -107,7 +110,7 @@ export function validateContent(text, toolId) {
   const matchScore = score(lower, rule.matches);
   const mismatchScore = score(lower, rule.mismatches);
 
-  if (mismatchScore > matchScore && mismatchScore >= 2) {
+  if (mismatchScore > matchScore && mismatchScore >= 1) {
     const detectedType = findBestMatchingType(lower, toolId);
     const detectedRule = rules[detectedType];
     const target = detectedRule || rule;
