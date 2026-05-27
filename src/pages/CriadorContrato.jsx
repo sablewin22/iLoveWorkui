@@ -81,7 +81,7 @@ export default function CriadorContrato() {
     }
     const userContent = `Data: ${hoje}\nTipo: ${form.tipo}\n${labelA}: ${form.parteA}\n${labelB}: ${form.parteB}\nObjeto: ${form.objeto}\nValor: ${form.valor}\nPrazo: ${form.prazo}\nObservações: ${form.observacoes}${foroText}`;
 
-    let systemPrompt = `Você é um advogado especialista. Redija um contrato profissional completo do tipo "${form.tipo}" com todas as cláusulas necessárias segundo a legislação brasileira. Use APENAS tópicos com "-" e **negrito**. NUNCA use "---" ou "////" ou "===" ou "***". Use a data atual fornecida. Não invente informações não fornecidas — se algo não foi informado, deixe um campo vazio "___________________" para a pessoa preencher depois. Responda em português brasileiro.`;
+    let systemPrompt = `Você é um advogado especialista. Redija um contrato profissional completo do tipo "${form.tipo}" com todas as cláusulas necessárias segundo a legislação brasileira. Use APENAS tópicos com "-" e **negrito**. NUNCA use "---" ou "////" ou "===" ou "***". A data fornecida é a data atual — use-a NO CONTRATO, não a substitua por espaços em branco ou underscores. Não invente informações não fornecidas — se algo não foi informado (como valor, prazo ou observações), deixe "___________________" para a pessoa preencher depois, mas NUNCA deixe a data em branco. Responda em português brasileiro.`;
 
     if (foroText) {
       systemPrompt += ` Inclua uma cláusula de eleição de foro para a comarca de ${form.foroLocal.trim()}.`;
