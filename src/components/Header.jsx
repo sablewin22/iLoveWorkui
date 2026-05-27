@@ -25,40 +25,40 @@ export default function Header() {
   const location = useLocation();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-black/5">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-xl font-title font-semibold hover:text-accent transition-colors shrink-0"
-        >
-          <Briefcase className="w-6 h-6 text-accent" />
-          iLoveWork
-        </Link>
+    <>
+      {extraOpen && <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setExtraOpen(false)} />}
+      <header className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-black/5">
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-xl font-title font-semibold hover:text-accent transition-colors shrink-0"
+          >
+            <Briefcase className="w-6 h-6 text-accent" />
+            iLoveWork
+          </Link>
 
-        <nav className="hidden lg:flex items-center gap-0 flex-nowrap">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`px-2 py-2 rounded-lg text-[13px] font-medium transition-colors whitespace-nowrap ${
-                location.pathname === link.path
-                  ? "text-accent bg-accent/10"
-                  : "text-light/70 hover:text-light hover:bg-white/5"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <div className="relative">
-            <button
-              onClick={() => setExtraOpen(!extraOpen)}
-              className="flex items-center gap-1 px-2 py-2 rounded-lg text-[13px] font-medium text-light/70 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap"
-            >
-              Veja mais opções <ChevronDown className={`w-3.5 h-3.5 transition-transform ${extraOpen ? "rotate-180" : ""}`} />
-            </button>
-            {extraOpen && (
-              <>
-                <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setExtraOpen(false)} />
+          <nav className="hidden lg:flex items-center gap-0 flex-nowrap">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`px-2 py-2 rounded-lg text-[13px] font-medium transition-colors whitespace-nowrap ${
+                  location.pathname === link.path
+                    ? "text-accent bg-accent/10"
+                    : "text-light/70 hover:text-light hover:bg-white/5"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div className="relative">
+              <button
+                onClick={() => setExtraOpen(!extraOpen)}
+                className="flex items-center gap-1 px-2 py-2 rounded-lg text-[13px] font-medium text-light/70 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap"
+              >
+                Veja mais opções <ChevronDown className={`w-3.5 h-3.5 transition-transform ${extraOpen ? "rotate-180" : ""}`} />
+              </button>
+              {extraOpen && (
                 <div className="absolute right-0 top-full mt-1 w-56 bg-white border border-black/10 rounded-xl shadow-lg py-2 z-50 animate-fadeIn">
                   {extraLinks.map((link) => (
                     <Link
@@ -75,7 +75,6 @@ export default function Header() {
                     </Link>
                   ))}
                 </div>
-              </>
             )}
           </div>
         </nav>
@@ -128,5 +127,6 @@ export default function Header() {
         </div>
       )}
     </header>
+    </>
   );
 }
