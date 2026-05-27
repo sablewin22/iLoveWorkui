@@ -15,14 +15,7 @@ export default function FileUpload({ onFileContent }) {
     const ext = file.name.split(".").pop().toLowerCase();
 
     try {
-      if (ext === "txt") {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          onFileContent(e.target.result);
-          setExtracting(false);
-        };
-        reader.readAsText(file);
-      } else if (ext === "pdf") {
+      if (ext === "pdf") {
         const pdfjsLib = await import("pdfjs-dist");
         pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
           "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -50,7 +43,7 @@ export default function FileUpload({ onFileContent }) {
         setExtracting(false);
       } else if (ext === "docx") {
         const mammoth = await import("mammoth");
-        const result = await mammoth.extractRawText({ arrayBuffer: file });
+        const result = await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
         onFileContent(result.value);
         setExtracting(false);
       }
@@ -69,7 +62,12 @@ export default function FileUpload({ onFileContent }) {
 
   const handleChange = (e) => {
     const file = e.target.files[0];
-    handleFile(file);
+    if (inputRef.current) inputRef.current.value = "";
+    if (fileName && file) {
+      setFileName(null);
+      onFileContent("");
+    }
+    if (file) handleFile(file);
   };
 
   return (
@@ -88,7 +86,7 @@ export default function FileUpload({ onFileContent }) {
         <input
           ref={inputRef}
           type="file"
-          accept=".pdf,.docx,.txt"
+          accept=".pdf,.docx"
           onChange={handleChange}
           className="hidden"
           aria-label="Selecionar arquivo"
@@ -110,7 +108,7 @@ export default function FileUpload({ onFileContent }) {
             <p className="text-light/60 text-sm">
               Arraste um arquivo aqui ou clique para selecionar
             </p>
-            <p className="text-light/30 text-xs mt-1">PDF, DOCX ou TXT</p>
+            <p className="text-light/30 text-xs mt-1">PDF ou DOCX</p>
           </div>
         )}
       </div>

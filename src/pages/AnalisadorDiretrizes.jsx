@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ClipboardCheck, CheckCircle, X } from "lucide-react";
+import { ArrowLeft, ClipboardCheck } from "lucide-react";
 import TabToggle from "../components/TabToggle";
 import FileUpload from "../components/FileUpload";
 import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { callClaude } from "../services/claudeApi";
+import { validateContent } from "../services/validateContent";
 
 const systemPrompt = "Você é um especialista em compliance. Analise o documento (política interna, regulamento ou manual). Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
 
@@ -26,9 +27,19 @@ export default function AnalisadorDiretrizes() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [validation, setValidation] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
 
   const handleFileContent = (content, fileName) => {
+    if (content === "") {
+      setUploadedFile(null);
+      setText("");
+      setResult(null);
+      setLoading(false);
+      setError(null);
+      setValidation(null);
+      return;
+    }
     if (content === null && fileName) {
       setError("Não foi possível extrair o texto do arquivo. Tente usar a aba 'Colar texto'.");
       return;
@@ -36,15 +47,16 @@ export default function AnalisadorDiretrizes() {
     setText(content);
     setUploadedFile({ name: fileName, content });
     setError(null);
-  };
-
-  const handleRemoveFile = () => {
-    setUploadedFile(null);
-    setText("");
+    const v = validateContent(content, "diretrizes");
+    if (v) { setValidation(v); return; }
+    setValidation(null);
   };
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
+    const v = validateContent(text, "diretrizes");
+    if (v) { setValidation(v); return; }
+    setValidation(null);
     setLoading(true);
     setError(null);
     setResult(null);
@@ -74,22 +86,19 @@ export default function AnalisadorDiretrizes() {
         <TabToggle activeTab={tab} onTabChange={setTab} />
 
         {tab === "upload" ? (
-          uploadedFile ? (
-            <div className="border-2 border-green-400/30 bg-green-50 rounded-xl p-8 text-center">
-              <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-3" />
-              <p className="text-green-700 font-medium text-base">Upload realizado com sucesso!</p>
-              <p className="text-green-600 text-sm mt-1">{uploadedFile.name}</p>
-              <button onClick={handleRemoveFile} className="mt-3 text-sm text-green-600 hover:text-green-800 underline inline-flex items-center gap-1">
-                <X className="w-3 h-3" /> Remover arquivo
-              </button>
-            </div>
-          ) : (
-            <FileUpload onFileContent={handleFileContent} />
-          )
+          <FileUpload onFileContent={handleFileContent} />
         ) : (
           <TextInput value={text} onChange={setText} placeholder="Cole o texto da política, regulamento ou manual aqui..." />
         )}
 
+        {validation && (
+          <p className="text-amber-600 text-sm bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+            <span dangerouslySetInnerHTML={{ __html: validation.message }} />
+            {validation.suggestionPath && (
+              <button onClick={() => navigate(validation.suggestionPath)} className="underline font-medium ml-1">Ir para ferramenta</button>
+            )}
+          </p>
+        )}
         {error && <p className="text-red-400 text-sm">{error}</p>}
 
         <button onClick={handleSubmit} disabled={!text.trim() || loading} className="btn-accent w-full">
@@ -98,7 +107,7 @@ export default function AnalisadorDiretrizes() {
       </div>
 
       {loading && <LoadingSpinner />}
-      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setText(""); setUploadedFile(null); setError(null); setTab("upload"); }} />}
+      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setText(""); setUploadedFile(null); setError(null); setValidation(null); setTab("upload"); }} />}
     </div>
   );
 }

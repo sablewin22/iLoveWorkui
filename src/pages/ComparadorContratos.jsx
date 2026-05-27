@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, GitCompare, CheckCircle, X, Upload, FileText, Loader2 } from "lucide-react";
+import { ArrowLeft, GitCompare, CheckCircle, Upload, Loader2 } from "lucide-react";
 import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -31,14 +31,7 @@ const FileUploadInline = ({ label, onTextExtracted }) => {
     const ext = file.name.split(".").pop().toLowerCase();
     try {
       let text = "";
-      if (ext === "txt") {
-        text = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (e) => resolve(e.target.result);
-          reader.onerror = reject;
-          reader.readAsText(file);
-        });
-      } else if (ext === "pdf") {
+      if (ext === "pdf") {
         const pdfjsLib = await import("pdfjs-dist");
         pdfjsLib.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
         const pdf = await pdfjsLib.getDocument(await file.arrayBuffer()).promise;
@@ -49,7 +42,7 @@ const FileUploadInline = ({ label, onTextExtracted }) => {
         }
       } else if (ext === "docx") {
         const mammoth = await import("mammoth");
-        const result = await mammoth.extractRawText({ arrayBuffer: file });
+        const result = await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
         text = result.value;
       }
       onTextExtracted(text);
@@ -72,7 +65,7 @@ const FileUploadInline = ({ label, onTextExtracted }) => {
         onClick={() => inputRef.current?.click()}
         className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-all border-black/10 hover:border-black/20"
       >
-        <input ref={inputRef} type="file" accept=".pdf,.docx,.txt" onChange={handleChange} className="hidden" />
+        <input ref={inputRef} type="file" accept=".pdf,.docx" onChange={handleChange} className="hidden" />
         {extracting ? (
           <div className="flex items-center justify-center gap-2 text-light/60">
             <Loader2 className="w-4 h-4 animate-spin text-accent" />
@@ -136,7 +129,7 @@ export default function ComparadorContratos() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="space-y-3">
           <label className="block text-sm font-medium text-light/80">Versão Anterior</label>
-          <FileUploadInline label="PDF, DOCX ou TXT" onTextExtracted={(t) => { setVersaoAntiga(t); setOldUploaded(true); }} />
+          <FileUploadInline label="PDF ou DOCX" onTextExtracted={(t) => { setVersaoAntiga(t); setOldUploaded(true); }} />
           {oldUploaded && (
             <div className="flex items-center gap-2 text-green-600 text-xs">
               <CheckCircle className="w-3.5 h-3.5" />
@@ -148,7 +141,7 @@ export default function ComparadorContratos() {
         </div>
         <div className="space-y-3">
           <label className="block text-sm font-medium text-light/80">Versão Nova</label>
-          <FileUploadInline label="PDF, DOCX ou TXT" onTextExtracted={(t) => { setVersaoNova(t); setNewUploaded(true); }} />
+          <FileUploadInline label="PDF ou DOCX" onTextExtracted={(t) => { setVersaoNova(t); setNewUploaded(true); }} />
           {newUploaded && (
             <div className="flex items-center gap-2 text-green-600 text-xs">
               <CheckCircle className="w-3.5 h-3.5" />

@@ -85,6 +85,8 @@ export default function CriadorContrato() {
 
     if (foroText) {
       systemPrompt += ` Inclua uma cláusula de eleição de foro para a comarca de ${form.foroLocal.trim()}.`;
+    } else {
+      systemPrompt += ` NÃO inclua cláusula de eleição de foro neste contrato.`;
     }
 
     try {

@@ -1,21 +1,90 @@
 const rules = {
   curriculo: {
-    matches: ["currículo", "curriculo", "experiência", "experiencia", "formação", "formacao", "graduação", "graduacao", "cargo", "habilidade"],
-    mismatches: ["cláusula", "clausula", "foro", "rescisão", "rescisao", "vigência", "vigencia", "contratante", "contratado"],
+    matches: [
+      "currículo", "curriculo", "experiência", "experiencia", "formação", "formacao",
+      "graduação", "graduacao", "cargo", "habilidade", "competência", "competencia",
+      "idioma", "resumo profissional", "formação acadêmica", "formacao academica",
+    ],
+    mismatches: [
+      "cláusula", "clausula", "foro", "rescisão", "rescisao", "vigência", "vigencia",
+      "contratante", "contratado", "faturamento", "receita", "lucro",
+      "ata de reunião", "pauta", "compliance", "diretriz", "política interna",
+    ],
+    suggestion: "Analisador de Currículo",
+    suggestionPath: "/analisador-curriculo",
+  },
+  contrato: {
+    matches: [
+      "cláusula", "clausula", "contratante", "contratado", "foro",
+      "rescisão", "rescisao", "vigência", "vigencia", "partes", "objeto",
+      "prazo", "vencimento",
+    ],
+    mismatches: [
+      "currículo", "curriculo", "habilidade", "cargo", "graduação", "graduacao",
+      "faturamento", "receita", "ata de reunião", "pauta", "política", "diretriz",
+    ],
     suggestion: "Analisador de Contrato",
     suggestionPath: "/analisador-contrato",
   },
-  contrato: {
-    matches: ["cláusula", "clausula", "contratante", "contratado", "foro", "rescisão", "rescisao", "vigência", "vigencia"],
-    mismatches: ["currículo", "curriculo", "habilidade", "cargo", "graduação", "graduacao"],
-    suggestion: "Analisador de Currículo",
-    suggestionPath: "/analisador-curriculo",
+  diretrizes: {
+    matches: [
+      "política", "politica", "compliance", "regulamento", "conduta",
+      "manual", "diretriz", "norma", "procedimento", "código de ética",
+      "codigo de etica",
+    ],
+    mismatches: [
+      "cláusula", "foro", "contratante", "currículo", "curriculo",
+      "experiência", "experiencia", "faturamento", "receita", "ata de reunião",
+    ],
+    suggestion: "Analisador de Diretrizes",
+    suggestionPath: "/analisador-diretrizes",
+  },
+  ata: {
+    matches: [
+      "reunião", "reuniao", "participante", "pauta", "discussão", "discussao",
+      "deliberação", "deliberacao", "assunto", "ponto de pauta",
+      "presente", "ordem do dia", "encaminhamento",
+    ],
+    mismatches: [
+      "cláusula", "foro", "contratante", "currículo", "curriculo",
+      "faturamento", "experiência", "experiencia", "política", "compliance",
+    ],
+    suggestion: "Gerador de Ata de Reunião",
+    suggestionPath: "/gerador-ata",
+  },
+  dados_empresariais: {
+    matches: [
+      "faturamento", "receita", "lucro", "balanço", "balanco", "indicador",
+      "dívida", "divida", "patrimônio", "patrimonio", "financeiro",
+      "orçamento", "orcamento", "despesa", "custos", "investimento", "margem",
+    ],
+    mismatches: [
+      "cláusula", "foro", "currículo", "curriculo", "experiência", "experiencia",
+      "ata de reunião", "reunião", "política", "compliance",
+    ],
+    suggestion: "Analisador de Dados Empresariais",
+    suggestionPath: "/analisador-dados-empresariais",
   },
 };
 
 function score(text, wordList) {
   const lower = text.toLowerCase();
   return wordList.filter((w) => lower.includes(w)).length;
+}
+
+function findBestMatchingType(text, excludeToolId) {
+  const lower = text.toLowerCase();
+  let bestType = null;
+  let bestScore = 0;
+  for (const [type, rule] of Object.entries(rules)) {
+    if (type === excludeToolId) continue;
+    const s = score(lower, rule.matches);
+    if (s > bestScore) {
+      bestScore = s;
+      bestType = type;
+    }
+  }
+  return bestType;
 }
 
 export function validateContent(text, toolId) {
@@ -31,14 +100,17 @@ export function validateContent(text, toolId) {
     };
   }
 
-  const matchScore = score(text, rule.matches);
-  const mismatchScore = score(text, rule.mismatches);
+  const matchScore = score(lower, rule.matches);
+  const mismatchScore = score(lower, rule.mismatches);
 
   if (mismatchScore > matchScore && mismatchScore >= 2) {
+    const detectedType = findBestMatchingType(lower, toolId);
+    const detectedRule = rules[detectedType];
+    const target = detectedRule || rule;
     return {
       type: "warning",
-      message: `O texto informado parece não ser compatível com esta ferramenta. Talvez você queira usar o <strong>${rule.suggestion}</strong>?`,
-      suggestionPath: rule.suggestionPath,
+      message: `O texto informado parece não ser compatível com esta ferramenta. Talvez você queira usar o <strong>${target.suggestion}</strong>?`,
+      suggestionPath: target.suggestionPath,
     };
   }
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Languages, CheckCircle, X } from "lucide-react";
+import { ArrowLeft, Languages } from "lucide-react";
 import TabToggle from "../components/TabToggle";
 import FileUpload from "../components/FileUpload";
 import TextInput from "../components/TextInput";
@@ -27,6 +27,14 @@ export default function TradutorJuridico() {
   const [error, setError] = useState(null);
 
   const handleFileContent = (content, fileName) => {
+    if (content === "") {
+      setUploadedFile(null);
+      setText("");
+      setResult(null);
+      setLoading(false);
+      setError(null);
+      return;
+    }
     if (content === null && fileName) {
       setError("Não foi possível extrair o texto do arquivo. Tente usar a aba 'Colar texto'.");
       return;
@@ -34,11 +42,6 @@ export default function TradutorJuridico() {
     setText(content);
     setUploadedFile({ name: fileName, content });
     setError(null);
-  };
-
-  const handleRemoveFile = () => {
-    setUploadedFile(null);
-    setText("");
   };
 
   const handleSubmit = async () => {
@@ -83,18 +86,7 @@ export default function TradutorJuridico() {
         <TabToggle activeTab={tab} onTabChange={setTab} />
 
         {tab === "upload" ? (
-          uploadedFile ? (
-            <div className="border-2 border-green-400/30 bg-green-50 rounded-xl p-8 text-center">
-              <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-3" />
-              <p className="text-green-700 font-medium text-base">Upload realizado com sucesso!</p>
-              <p className="text-green-600 text-sm mt-1">{uploadedFile.name}</p>
-              <button onClick={handleRemoveFile} className="mt-3 text-sm text-green-600 hover:text-green-800 underline inline-flex items-center gap-1">
-                <X className="w-3 h-3" /> Remover arquivo
-              </button>
-            </div>
-          ) : (
-            <FileUpload onFileContent={handleFileContent} />
-          )
+          <FileUpload onFileContent={handleFileContent} />
         ) : (
           <TextInput value={text} onChange={setText} placeholder="Cole o texto aqui..." />
         )}

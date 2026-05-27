@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Scale, CheckCircle, X } from "lucide-react";
+import { ArrowLeft, Scale } from "lucide-react";
 import TabToggle from "../components/TabToggle";
 import FileUpload from "../components/FileUpload";
 import TextInput from "../components/TextInput";
@@ -22,6 +22,15 @@ export default function AnalisadorContrato() {
   const [uploadedFile, setUploadedFile] = useState(null);
 
   const handleFileContent = (content, fileName) => {
+    if (content === "") {
+      setUploadedFile(null);
+      setText("");
+      setResult(null);
+      setLoading(false);
+      setError(null);
+      setValidation(null);
+      return;
+    }
     if (content === null && fileName) {
       setError("Não foi possível extrair o texto do arquivo. Tente usar a aba 'Colar texto'.");
       return;
@@ -29,12 +38,9 @@ export default function AnalisadorContrato() {
     setText(content);
     setUploadedFile({ name: fileName, content });
     setError(null);
+    const v = validateContent(content, "contrato");
+    if (v) { setValidation(v); return; }
     setValidation(null);
-  };
-
-  const handleRemoveFile = () => {
-    setUploadedFile(null);
-    setText("");
   };
 
   const handleTextChange = (v) => { setText(v); setValidation(null); };
@@ -73,18 +79,7 @@ export default function AnalisadorContrato() {
         <TabToggle activeTab={tab} onTabChange={setTab} />
 
         {tab === "upload" ? (
-          uploadedFile ? (
-            <div className="border-2 border-green-400/30 bg-green-50 rounded-xl p-8 text-center">
-              <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-3" />
-              <p className="text-green-700 font-medium text-base">Upload realizado com sucesso!</p>
-              <p className="text-green-600 text-sm mt-1">{uploadedFile.name}</p>
-              <button onClick={handleRemoveFile} className="mt-3 text-sm text-green-600 hover:text-green-800 underline inline-flex items-center gap-1">
-                <X className="w-3 h-3" /> Remover arquivo
-              </button>
-            </div>
-          ) : (
-            <FileUpload onFileContent={handleFileContent} />
-          )
+          <FileUpload onFileContent={handleFileContent} />
         ) : (
           <TextInput value={text} onChange={handleTextChange} placeholder="Cole o texto do contrato aqui..." />
         )}
