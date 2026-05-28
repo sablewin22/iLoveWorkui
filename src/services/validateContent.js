@@ -133,6 +133,17 @@ export function validateContent(text, toolId) {
     };
   }
 
+  const strongIds = {
+    curriculo: ["currículo", "curriculo"],
+    contrato: ["contratante", "contratado"],
+    diretrizes: ["código de ética", "codigo de etica"],
+    ata: ["ata de reunião"],
+    dados_empresariais: ["balanço patrimonial", "demonstrativo de resultado"],
+    tradutor: ["juridiquês"],
+  };
+  const ids = strongIds[toolId];
+  if (ids && ids.some(k => lower.includes(k))) return null;
+
   const matchScore = score(lower, rule.matches);
   const mismatchScore = score(lower, rule.mismatches);
 
