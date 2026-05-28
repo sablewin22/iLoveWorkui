@@ -46,9 +46,9 @@
   }
 
   [data-page="rescisao"] {
-    --page-accent-r: 249;
-    --page-accent-g: 115;
-    --page-accent-b: 22;
+    --page-accent-r: 212;
+    --page-accent-g: 160;
+    --page-accent-b: 23;
   }
 
   [data-page="tradutor"] {
@@ -64,9 +64,9 @@
   }
 
   [data-page="dados"] {
-    --page-accent-r: 16;
-    --page-accent-g: 185;
-    --page-accent-b: 129;
+    --page-accent-r: 114;
+    --page-accent-g: 47;
+    --page-accent-b: 55;
   }
 
   [data-page="politica"] {
