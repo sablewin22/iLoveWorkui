@@ -1,14 +1,17 @@
 const rules = {
   curriculo: {
     matches: [
-      "currículo", "curriculo", "experiência", "experiencia", "formação", "formacao",
+      "currículo", "curriculo", "curriculum vitae", "cv", "resume",
+      "experiência", "experiencia", "formação", "formacao",
       "graduação", "graduacao", "cargo", "habilidade", "competência", "competencia",
       "idioma", "resumo profissional", "formação acadêmica", "formacao academica",
+      "objetivo", "qualificações", "qualificacoes",
+      "publicações", "publicacoes", "pesquisa", "orientação", "orientacao",
     ],
     mismatches: [
       "cláusula", "clausula", "foro", "rescisão", "rescisao", "vigência", "vigencia",
       "contratante", "contratado", "faturamento", "receita", "lucro",
-      "ata de reunião", "pauta", "reunião", "participante", "discussão",
+      "ata de reunião", "pauta",
       "compliance", "diretriz", "política interna", "política", "norma",
       "procedimento", "regulamento", "conduta", "manual",
       "balanço", "indicador", "dívida", "financeiro",
@@ -107,16 +110,12 @@ function findBestMatchingType(text, excludeToolId) {
   const lower = text.toLowerCase();
   const excludeRule = rules[excludeToolId];
   const activeMismatches = excludeRule.mismatches.filter(m => lower.includes(m));
-
   let bestType = null;
   let bestScore = 0;
   for (const [type, rule] of Object.entries(rules)) {
     if (type === excludeToolId) continue;
     const s = activeMismatches.filter(m => rule.matches.includes(m)).length;
-    if (s > bestScore) {
-      bestScore = s;
-      bestType = type;
-    }
+    if (s > bestScore) { bestScore = s; bestType = type; }
   }
   return bestType;
 }
@@ -139,8 +138,7 @@ export function validateContent(text, toolId) {
 
   if (mismatchScore > matchScore && mismatchScore >= 1) {
     const detectedType = findBestMatchingType(lower, toolId);
-    const detectedRule = rules[detectedType];
-    const target = detectedRule || rule;
+    const target = rules[detectedType] || rule;
     return {
       type: "warning",
       message: `O texto informado parece não ser compatível com esta ferramenta. Talvez você queira usar o <strong>${target.suggestion}</strong>?`,

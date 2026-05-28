@@ -67,9 +67,9 @@ export default function ComparadorContratos() {
         <div className="space-y-3">
           <label className="block text-sm font-medium text-light/80">Versão Anterior</label>
           <FileUpload onFileContent={(content, fileName) => {
-            if (content === "" || (content === null && fileName)) return;
-            setVersaoAntiga(content);
-            setOldUploaded(true);
+            if (content === null && fileName) return;
+            setVersaoAntiga(content || "");
+            setOldUploaded(!!content);
           }} />
           {oldUploaded && (
             <div className="flex items-center gap-2 text-green-600 text-xs">
@@ -83,9 +83,9 @@ export default function ComparadorContratos() {
         <div className="space-y-3">
           <label className="block text-sm font-medium text-light/80">Versão Nova</label>
           <FileUpload onFileContent={(content, fileName) => {
-            if (content === "" || (content === null && fileName)) return;
-            setVersaoNova(content);
-            setNewUploaded(true);
+            if (content === null && fileName) return;
+            setVersaoNova(content || "");
+            setNewUploaded(!!content);
           }} />
           {newUploaded && (
             <div className="flex items-center gap-2 text-green-600 text-xs">
