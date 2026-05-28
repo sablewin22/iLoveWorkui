@@ -20,9 +20,10 @@ const extraLinks = [
   { label: "Criador de Política Interna", path: "/criador-politica" },
 ];
 
-export default function Header({ sobreNosOpen, onToggleSobreNos }) {
+export default function Header() {
   const [open, setOpen] = useState(false);
   const [extraOpen, setExtraOpen] = useState(false);
+  const [sobreNosOpen, setSobreNosOpen] = useState(false);
   const location = useLocation();
 
   return (
@@ -79,14 +80,44 @@ export default function Header({ sobreNosOpen, onToggleSobreNos }) {
         </nav>
 
         <div className="flex items-center gap-1">
-          <button
-            onClick={onToggleSobreNos}
-            className="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-light/60 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap border border-black/5 hover:border-black/10"
-            aria-label="Sobre nós"
-          >
-            <Info className="w-4 h-4 lg:w-3.5 lg:h-3.5" />
-            <span className="hidden lg:inline">Sobre nós</span>
-          </button>
+
+          {/* Sobre Nós button + dropdown positioned together */}
+          <div className="relative">
+            <button
+              onClick={() => setSobreNosOpen(!sobreNosOpen)}
+              className="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-light/60 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap border border-black/5 hover:border-black/10"
+              aria-label="Sobre nós"
+            >
+              <Info className="w-4 h-4 lg:w-3.5 lg:h-3.5" />
+              <span className="hidden lg:inline">Sobre nós</span>
+            </button>
+
+            {sobreNosOpen && (
+              <>
+                <div className="fixed inset-0 z-30" onClick={() => setSobreNosOpen(!sobreNosOpen)} />
+                <div className="absolute right-0 top-full mt-1 z-40 w-80 bg-white border border-black/10 rounded-xl shadow-lg p-6 animate-fadeIn">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-title font-semibold text-lg text-light">Sobre o iLoveWork</h3>
+                    <button onClick={() => setSobreNosOpen(!sobreNosOpen)} className="text-light/40 hover:text-light transition-colors">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="space-y-3 text-sm text-light/70 leading-relaxed">
+                    <p>
+                      O <strong className="text-light">iLoveWork</strong> foi criado para facilitar o uso de documentos profissionais, tornando processos mais rápidos, organizados e acessíveis para estudantes, profissionais e empresas.
+                    </p>
+                    <p>
+                      A plataforma utiliza <strong className="text-light">inteligência artificial</strong> para apoiar a criação, análise e melhoria de documentos como currículos, contratos, relatórios e outros arquivos do dia a dia.
+                    </p>
+                    <p>
+                      Nosso objetivo é transformar tarefas complexas em soluções simples, oferecendo uma experiência intuitiva, prática e eficiente, com foco em produtividade, qualidade e acessibilidade.
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
           <button
             onClick={() => setOpen(!open)}
             className="lg:hidden btn-ghost p-2"
@@ -114,14 +145,6 @@ export default function Header({ sobreNosOpen, onToggleSobreNos }) {
                 {link.label}
               </Link>
             ))}
-            <div className="border-t border-black/5 my-2" />
-            <button
-              onClick={() => { setOpen(false); onToggleSobreNos(); }}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-light/70 hover:text-light hover:bg-black/5 transition-colors w-full"
-            >
-              <Info className="w-4 h-4" />
-              Sobre nós
-            </button>
           </div>
         </div>
       )}
