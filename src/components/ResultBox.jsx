@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 
 function markdownToHtml(md) {
   let html = md
+    .replace(/^#### (.+)$/gm, "<h4>$1</h4>")
     .replace(/^### (.+)$/gm, "<h3>$1</h3>")
     .replace(/^## (.+)$/gm, "<h2>$1</h2>")
     .replace(/^# (.+)$/gm, "<h1>$1</h1>")
@@ -59,10 +60,11 @@ export default function ResultBox({ content, onNewAnalysis }) {
               max-width: 800px;
               margin: 0 auto;
             }
-            h1, h2, h3 { font-family: 'Raleway', sans-serif; font-weight: 600; margin-top: 24px; margin-bottom: 12px; color: #1A1A1A; }
+            h1, h2, h3, h4 { font-family: 'Raleway', sans-serif; font-weight: 600; margin-top: 24px; margin-bottom: 12px; color: #1A1A1A; }
             h1 { font-size: 24px; }
             h2 { font-size: 20px; }
             h3 { font-size: 18px; }
+            h4 { font-size: 16px; }
             p { margin-bottom: 12px; color: #333; }
             ul, ol { margin-bottom: 12px; padding-left: 24px; }
             li { margin-bottom: 4px; color: #333; }
@@ -99,6 +101,11 @@ export default function ResultBox({ content, onNewAnalysis }) {
               <h3 className="font-sub font-semibold text-lg text-accent/90 mt-5 mb-2">
                 {children}
               </h3>
+            ),
+            h4: ({ children }) => (
+              <h4 className="font-title font-semibold text-base text-accent mt-4 mb-1.5">
+                {children}
+              </h4>
             ),
             p: ({ children }) => (
               <p className="text-light/85 text-base leading-relaxed mb-3">{children}</p>
