@@ -12,7 +12,7 @@ const rules = {
       "cláusula", "clausula", "foro", "rescisão", "rescisao", "vigência", "vigencia",
       "contratante", "contratado", "faturamento", "receita", "lucro",
       "ata de reunião", "pauta",
-      "compliance", "diretriz", "política interna", "política", "norma",
+      "compliance", "diretriz", "política interna", "norma",
       "procedimento", "regulamento", "conduta", "manual",
       "balanço", "indicador", "dívida", "financeiro",
     ],
@@ -134,7 +134,7 @@ export function validateContent(text, toolId) {
   }
 
   const strongIds = {
-    curriculo: ["currículo", "curriculo"],
+    curriculo: ["currículo", "curriculo", "pesquisa"],
     contrato: ["contratante", "contratado"],
     diretrizes: ["código de ética", "codigo de etica"],
     ata: ["ata de reunião"],
