@@ -49,7 +49,7 @@ const tools = [
     title: "Simulador de Rescisão Trabalhista",
     description: "Calcule valores estimados de rescisão trabalhista com base no salário, tempo de empresa e motivo do desligamento.",
     path: "/simulador-rescisao",
-    color: "#F97316",
+    color: "#8B4513",
   },
   {
     icon: Languages,
@@ -70,7 +70,7 @@ const tools = [
     title: "Analisador de Dados Empresariais",
     description: "Analise informações empresariais para identificar padrões, tendências, riscos e oportunidades estratégicas.",
     path: "/analisador-dados",
-    color: "#10B981",
+    color: "#DC2626",
   },
   {
     icon: Building2,
