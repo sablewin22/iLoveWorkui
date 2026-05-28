@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -17,6 +18,7 @@ import SobreNos from "./components/SobreNos";
 
 export default function App() {
   const location = useLocation();
+  const [sobreNosOpen, setSobreNosOpen] = useState(false);
 
   const pageMap = {
     "/analisador-curriculo": "curriculo",
@@ -34,7 +36,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col" data-page={pageMap[location.pathname] || ""}>
-      <Header />
+      <Header sobreNosOpen={sobreNosOpen} onToggleSobreNos={() => setSobreNosOpen(!sobreNosOpen)} />
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -52,7 +54,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
-      <SobreNos />
+      <SobreNos open={sobreNosOpen} onClose={() => setSobreNosOpen(false)} />
     </div>
   );
 }

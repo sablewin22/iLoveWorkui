@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Briefcase, Menu, X, ChevronDown } from "lucide-react";
+import { Briefcase, Menu, X, ChevronDown, Info } from "lucide-react";
 import { useState } from "react";
 
 
@@ -20,7 +20,7 @@ const extraLinks = [
   { label: "Criador de Política Interna", path: "/criador-politica" },
 ];
 
-export default function Header() {
+export default function Header({ sobreNosOpen, onToggleSobreNos }) {
   const [open, setOpen] = useState(false);
   const [extraOpen, setExtraOpen] = useState(false);
   const location = useLocation();
@@ -80,6 +80,14 @@ export default function Header() {
 
         <div className="flex items-center gap-1">
           <button
+            onClick={onToggleSobreNos}
+            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-light/60 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap border border-black/5 hover:border-black/10"
+            aria-label="Sobre nós"
+          >
+            <Info className="w-3.5 h-3.5" />
+            Sobre nós
+          </button>
+          <button
             onClick={() => setOpen(!open)}
             className="lg:hidden btn-ghost p-2"
             aria-label="Abrir menu"
@@ -122,6 +130,14 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
+            <div className="border-t border-black/5 my-2" />
+            <button
+              onClick={() => { setOpen(false); onToggleSobreNos(); }}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-light/70 hover:text-light hover:bg-black/5 transition-colors w-full"
+            >
+              <Info className="w-4 h-4" />
+              Sobre nós
+            </button>
           </div>
         </div>
       )}
