@@ -70,7 +70,7 @@ const tools = [
     title: "Analisador de Dados Empresariais",
     description: "Analise informações empresariais para identificar padrões, tendências, riscos e oportunidades estratégicas.",
     path: "/analisador-dados",
-    color: "#F472B6",
+    color: "#722F37",
   },
   {
     icon: Building2,
