@@ -81,11 +81,11 @@ export default function Header({ sobreNosOpen, onToggleSobreNos }) {
         <div className="flex items-center gap-1">
           <button
             onClick={onToggleSobreNos}
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-light/60 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap border border-black/5 hover:border-black/10"
+            className="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-light/60 hover:text-light hover:bg-white/5 transition-colors whitespace-nowrap border border-black/5 hover:border-black/10"
             aria-label="Sobre nós"
           >
-            <Info className="w-3.5 h-3.5" />
-            Sobre nós
+            <Info className="w-4 h-4 lg:w-3.5 lg:h-3.5" />
+            <span className="hidden lg:inline">Sobre nós</span>
           </button>
           <button
             onClick={() => setOpen(!open)}
@@ -100,23 +100,7 @@ export default function Header({ sobreNosOpen, onToggleSobreNos }) {
       {open && (
         <div className="lg:hidden glass-effect border-t border-black/5 max-h-[70vh] overflow-y-auto">
           <div className="px-4 py-2 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                onClick={() => setOpen(false)}
-                className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
-                  location.pathname === link.path
-                    ? "text-accent bg-accent/10"
-                    : "text-light/70 hover:text-light hover:bg-black/5"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div className="border-t border-black/5 my-2" />
-            <p className="px-3 py-1 text-xs font-medium text-light/40 uppercase tracking-wider">Veja mais opções</p>
-            {extraLinks.map((link) => (
+            {[...navLinks, ...extraLinks].map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
