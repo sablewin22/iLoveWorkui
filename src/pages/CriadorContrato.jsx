@@ -30,7 +30,7 @@ const parteBLabels = {
   "Parceria Comercial": "Segundo Parceiro",
 };
 
-const foroTipos = ["CLT", "Locação de Imóvel"];
+
 
 function cleanResult(text) {
   return text
@@ -66,7 +66,7 @@ export default function CriadorContrato() {
 
   const labelA = parteALabels[form.tipo] || "Parte A";
   const labelB = parteBLabels[form.tipo] || "Parte B";
-  const mostraForo = foroTipos.includes(form.tipo);
+  const mostraForo = true;
 
   const handleSubmit = async () => {
     if (!form.tipo || !form.parteA || !form.parteB || !form.objeto) return;
