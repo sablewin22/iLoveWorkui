@@ -142,10 +142,10 @@ export function validateContent(text, toolId) {
 
   const strongIds = {
     contrato: ["contratante", "contratado"],
-    diretrizes: ["código de ética", "codigo de etica", "política de compliance", "politica de compliance"],
+    diretrizes: ["diretriz", "código de ética", "codigo de etica", "política de compliance", "politica de compliance"],
     ata: ["ata de reunião", "ata da reunião"],
     dados_empresariais: ["balanço patrimonial", "demonstrativo de resultado"],
-    tradutor: ["juridiquês"],
+    tradutor: ["cláusula", "jurídico", "advogado", "contrato", "juridiquês"],
   };
 
   const ids = strongIds[toolId];

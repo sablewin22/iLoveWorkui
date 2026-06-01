@@ -45,18 +45,18 @@ export default function TradutorJuridico() {
       return;
     }
     setError(null);
-    const v = validateContent(content, "contrato");
+    const v = validateContent(content, "tradutor");
     if (v) { setValidation(v); return; }
     setValidation(null);
     setText(content);
     setUploadedFile({ name: fileName, content });
   };
 
-  const handleTextChange = (v) => { setText(v); const check = validateContent(v, "contrato"); setValidation(check && check.type === "warning" ? check : null); };
+  const handleTextChange = (v) => { setText(v); const check = validateContent(v, "tradutor"); setValidation(check && check.type === "warning" ? check : null); };
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
-    const v = validateContent(text, "contrato");
+    const v = validateContent(text, "tradutor");
     if (v) { setValidation(v); return; }
     setValidation(null);
     setLoading(true);
