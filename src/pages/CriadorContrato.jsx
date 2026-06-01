@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, FileEdit } from "lucide-react";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { callClaude } from "../services/claudeApi";
+import { callClaude, callClaudeEdit } from "../services/claudeApi";
 import RequiredField from "../components/RequiredField";
 import ErrorAlert from "../components/ErrorAlert";
 
@@ -59,6 +59,8 @@ export default function CriadorContrato() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
+  const [lastContent, setLastContent] = useState("");
+  const [lastSystemPrompt, setLastSystemPrompt] = useState("");
 
   const isFormValid = form.tipo && form.parteA && form.parteB && form.objeto;
 
@@ -82,6 +84,7 @@ export default function CriadorContrato() {
       foroText = `\nForo eleito: ${form.foroLocal.trim()}`;
     }
     const userContent = `Data: ${hoje}\nTipo: ${form.tipo}\n${labelA}: ${form.parteA}\n${labelB}: ${form.parteB}\nObjeto: ${form.objeto}\nValor: ${form.valor}\nPrazo: ${form.prazo}\nObservações: ${form.observacoes}${foroText}`;
+    setLastContent(userContent);
 
     let systemPrompt = `Você é um advogado especialista. Redija um contrato profissional completo do tipo "${form.tipo}" com todas as cláusulas necessárias segundo a legislação brasileira. Use APENAS tópicos com "-" e **negrito**. NUNCA use "---" ou "////" ou "===" ou "***". A data fornecida é a data atual — use-a NO CONTRATO, não a substitua por espaços em branco ou underscores. Não invente informações não fornecidas — se algo não foi informado (como valor, prazo ou observações), deixe "___________________" para a pessoa preencher depois, mas NUNCA deixe a data em branco. Responda em português brasileiro.`;
 
@@ -90,6 +93,7 @@ export default function CriadorContrato() {
     } else {
       systemPrompt += ` NÃO inclua cláusula de eleição de foro neste contrato.`;
     }
+    setLastSystemPrompt(systemPrompt);
 
     try {
       const res = await callClaude(systemPrompt, userContent, {
@@ -106,6 +110,19 @@ export default function CriadorContrato() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEdit = async (previousResult, editInstruction) => {
+    if (editInstruction === "__RESTORE__") { setResult(previousResult); return; }
+    const sp = lastSystemPrompt || `Você é um advogado especialista. Redija um contrato profissional completo com todas as cláusulas necessárias segundo a legislação brasileira. Use APENAS tópicos com "-" e **negrito**. NUNCA use "---" ou "////" ou "===" ou "***". Responda em português brasileiro.`;
+    const res = await callClaudeEdit(sp, lastContent, previousResult, editInstruction, {
+      tipo: form.tipo,
+      [labelA]: form.parteA,
+      [labelB]: form.parteB,
+      valor: form.valor,
+      prazo: form.prazo,
+    });
+    setResult(cleanResult(res));
   };
 
   return (
@@ -197,7 +214,7 @@ export default function CriadorContrato() {
       {loading && <LoadingSpinner />}
       {result && (
         <div>
-          <ResultBox content={result} onNewAnalysis={() => { setResult(null); setForm({ tipo: "", parteA: "", parteB: "", objeto: "", valor: "", prazo: "", observacoes: "", incluirForo: false, foroLocal: "" }); setError(null); }} />
+          <ResultBox content={result} onNewAnalysis={() => { setResult(null); setForm({ tipo: "", parteA: "", parteB: "", objeto: "", valor: "", prazo: "", observacoes: "", incluirForo: false, foroLocal: "" }); setError(null); }} onEdit={handleEdit} />
         </div>
       )}
     </div>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Mail } from "lucide-react";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { callClaude } from "../services/claudeApi";
+import { callClaude, callClaudeEdit } from "../services/claudeApi";
 import RequiredField from "../components/RequiredField";
 import ErrorAlert from "../components/ErrorAlert";
 
@@ -36,6 +36,8 @@ export default function GeradorEmail() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
+  const [lastContent, setLastContent] = useState("");
+  const [lastSystemPrompt, setLastSystemPrompt] = useState("");
 
   const update = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
@@ -45,10 +47,13 @@ export default function GeradorEmail() {
     setError(null);
     setResult(null);
 
+    const userContent = `Tipo: ${form.tipo}\n\nContexto: ${form.contexto}`;
+    setLastContent(userContent);
     const systemPrompt = `Você é especialista em comunicação corporativa. Redija um e-mail profissional completo baseado nas informações abaixo. Escreva o e-mail por inteiro (Assunto, Saudação, Corpo, Fechamento, Assinatura) em um único bloco pronto para usar. Não divida em seções ou tópicos. Tom: ${form.tom}. Destinatário: ${form.destinatario}. Contexto: ${form.contexto}. NUNCA use "---" ou "////" ou "===" ou "***". Responda em português brasileiro.`;
+    setLastSystemPrompt(systemPrompt);
 
     try {
-      const res = await callClaude(systemPrompt, `Tipo: ${form.tipo}\n\nContexto: ${form.contexto}`, {
+      const res = await callClaude(systemPrompt, userContent, {
         "Nome do Destinatário": form.destinatario,
       });
       setResult(cleanResult(res));
@@ -58,6 +63,14 @@ export default function GeradorEmail() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEdit = async (previousResult, editInstruction) => {
+    if (editInstruction === "__RESTORE__") { setResult(previousResult); return; }
+    const res = await callClaudeEdit(lastSystemPrompt, lastContent, previousResult, editInstruction, {
+      "Nome do Destinatário": form.destinatario,
+    });
+    setResult(cleanResult(res));
   };
 
   const isFormValid = form.tipo && form.contexto && form.tom && form.destinatario;
@@ -115,7 +128,7 @@ export default function GeradorEmail() {
       </div>
 
       {loading && <LoadingSpinner />}
-      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setForm({ tipo: "", contexto: "", tom: "", destinatario: "" }); setError(null); }} />}
+      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setForm({ tipo: "", contexto: "", tom: "", destinatario: "" }); setError(null); }} onEdit={handleEdit} />}
     </div>
   );
 }

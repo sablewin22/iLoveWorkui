@@ -7,7 +7,7 @@ import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorAlert from "../components/ErrorAlert";
-import { callClaude } from "../services/claudeApi";
+import { callClaude, callClaudeEdit } from "../services/claudeApi";
 import { validateContent } from "../services/validateContent";
 
 const systemPrompt = "Você é um advogado especialista em direito contratual brasileiro. Analise o contrato a seguir e identifique: (1) Cláusulas abusivas ou ilegais, (2) Riscos para as partes envolvidas, (3) Pontos de atenção e ambiguidades, (4) O que está faltando que deveria constar, (5) Recomendação final sobre assinar ou não. Seja preciso e use linguagem acessível. Responda em português brasileiro.";
@@ -66,6 +66,12 @@ export default function AnalisadorContrato() {
     }
   };
 
+  const handleEdit = async (previousResult, editInstruction) => {
+    if (editInstruction === "__RESTORE__") { setResult(previousResult); return; }
+    const res = await callClaudeEdit(systemPrompt, text, previousResult, editInstruction);
+    setResult(res);
+  };
+
   return (
     <div className="tool-container pt-24">
       <button onClick={() => navigate("/")} className="btn-ghost flex items-center gap-2 text-sm mb-6">
@@ -103,7 +109,7 @@ export default function AnalisadorContrato() {
       </div>
 
       {loading && <LoadingSpinner />}
-      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setText(""); setUploadedFile(null); setError(null); setValidation(null); setTab("upload"); }} />}
+      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setText(""); setUploadedFile(null); setError(null); setValidation(null); setTab("upload"); }} onEdit={handleEdit} />}
     </div>
   );
 }

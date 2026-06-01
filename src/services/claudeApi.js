@@ -82,6 +82,11 @@ export async function uploadAndAnalyze(mode, file, additionalContext = {}) {
   return data.result;
 }
 
+export async function callClaudeEdit(systemPrompt, userContent, previousResult, editInstruction, replacements = {}) {
+  const editPrompt = `${systemPrompt}\n\nIMPORTANTE: Você já processou este conteúdo e gerou um resultado abaixo. Agora o usuário deseja MODIFICAR esse resultado com a seguinte instrução: "${editInstruction}". Mantenha TODO o formato e estrutura originais, mas incorpore a alteração solicitada. Não use "---" ou "////" ou "===" ou "***".\n\nRESULTADO ANTERIOR (use como base):\n${previousResult}`;
+  return callClaude(editPrompt, userContent, replacements);
+}
+
 export function isDemoMode() {
   return false;
 }

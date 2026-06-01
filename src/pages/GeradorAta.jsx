@@ -7,8 +7,10 @@ import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorAlert from "../components/ErrorAlert";
-import { callClaude } from "../services/claudeApi";
+import { callClaude, callClaudeEdit } from "../services/claudeApi";
 import { validateContent } from "../services/validateContent";
+
+const systemPrompt = "Você é um especialista em documentação empresarial. Transforme as anotações fornecidas em uma ata de reunião profissional e organizada. Extraia participantes, tópicos, decisões e responsáveis. REGRAS ABSOLUTAS: (1) NÃO invente ou complete informações que não foram fornecidas. (2) Se um dado não estiver presente nas anotações, escreva exatamente \"______________________\" no lugar — NUNCA escreva \"não informado\", \"não especificado\", \"não consta\" ou qualquer variação disso. (3) Os únicos placeholders permitidos são ______________________. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
 
 function cleanResult(text) {
   return text
@@ -63,8 +65,6 @@ export default function GeradorAta() {
     setError(null);
     setResult(null);
 
-    const systemPrompt = "Você é um especialista em documentação empresarial. Transforme as anotações fornecidas em uma ata de reunião profissional e organizada. Extraia participantes, tópicos, decisões e responsáveis. REGRAS ABSOLUTAS: (1) NÃO invente ou complete informações que não foram fornecidas. (2) Se um dado não estiver presente nas anotações, escreva exatamente \"______________________\" no lugar — NUNCA escreva \"não informado\", \"não especificado\", \"não consta\" ou qualquer variação disso. (3) Os únicos placeholders permitidos são ______________________. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
-
     try {
       const res = await callClaude(systemPrompt, text);
       setResult(cleanResult(res));
@@ -74,6 +74,12 @@ export default function GeradorAta() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEdit = async (previousResult, editInstruction) => {
+    if (editInstruction === "__RESTORE__") { setResult(previousResult); return; }
+    const res = await callClaudeEdit(systemPrompt, text, previousResult, editInstruction);
+    setResult(cleanResult(res));
   };
 
   const handleNewAnalysis = () => {
@@ -122,7 +128,7 @@ export default function GeradorAta() {
       </div>
 
       {loading && <LoadingSpinner />}
-      {result && <ResultBox content={result} onNewAnalysis={handleNewAnalysis} />}
+      {result && <ResultBox content={result} onNewAnalysis={handleNewAnalysis} onEdit={handleEdit} />}
     </div>
   );
 }

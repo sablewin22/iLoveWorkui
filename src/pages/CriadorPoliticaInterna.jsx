@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Building2 } from "lucide-react";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { callClaude } from "../services/claudeApi";
+import { callClaude, callClaudeEdit } from "../services/claudeApi";
 import RequiredField from "../components/RequiredField";
 import ErrorAlert from "../components/ErrorAlert";
 
@@ -30,31 +30,15 @@ export default function CriadorPoliticaInterna() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
+  const [lastContent, setLastContent] = useState("");
+
+  const handleEdit = async (previousResult, editInstruction) => {
+    if (editInstruction === "__RESTORE__") { setResult(previousResult); return; }
+    const res = await callClaudeEdit("Você é um especialista em gestão empresarial e criação de políticas internas. Crie um documento de política interna personalizado. Adapte a linguagem ao perfil da empresa. Estruture regras claras e defina responsabilidades. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.", lastContent, previousResult, editInstruction);
+    setResult(cleanResult(res));
+  };
 
   const isFormValid = form.nomePolitica && form.empresa && form.objetivo;
-
-  const update = (field) => (e) => setForm({ ...form, [field]: e.target.value });
-
-  const handleSubmit = async () => {
-    if (!form.nomePolitica || !form.empresa || !form.objetivo) return;
-    setLoading(true);
-    setError(null);
-    setResult(null);
-
-    const userContent = `Nome da Política: ${form.nomePolitica}\nEmpresa: ${form.empresa}\nSetor: ${form.setor}\nObjetivo: ${form.objetivo}\nRegras sugeridas: ${form.regras}\nResponsáveis: ${form.responsaveis}`;
-
-    const systemPrompt = "Você é um especialista em gestão empresarial e criação de políticas internas. Crie um documento de política interna personalizado. Adapte a linguagem ao perfil da empresa. Estruture regras claras e defina responsabilidades. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
-
-    try {
-      const res = await callClaude(systemPrompt, userContent);
-      setResult(cleanResult(res));
-    } catch (e) {
-      setError(e.message);
-      setSuggestions(e.suggestions || []);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="tool-container pt-24">
@@ -113,7 +97,7 @@ export default function CriadorPoliticaInterna() {
 
       {loading && <LoadingSpinner />}
       {result && (
-        <ResultBox content={result} onNewAnalysis={() => { setResult(null); setForm({ nomePolitica: "", empresa: "", setor: "", objetivo: "", regras: "", responsaveis: "" }); setError(null); }} />
+        <ResultBox content={result} onNewAnalysis={() => { setResult(null); setForm({ nomePolitica: "", empresa: "", setor: "", objetivo: "", regras: "", responsaveis: "" }); setError(null); }} onEdit={handleEdit} />
       )}
     </div>
   );

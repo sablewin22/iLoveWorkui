@@ -6,7 +6,7 @@ import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorAlert from "../components/ErrorAlert";
-import { callClaude } from "../services/claudeApi";
+import { callClaude, callClaudeEdit } from "../services/claudeApi";
 import { validateContent } from "../services/validateContent";
 
 const systemPrompt = "Você é um especialista em análise documental. Compare as duas versões do contrato. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
@@ -31,6 +31,7 @@ export default function ComparadorContratos() {
   const [validation, setValidation] = useState(null);
   const [oldUploaded, setOldUploaded] = useState(false);
   const [newUploaded, setNewUploaded] = useState(false);
+  const [lastContent, setLastContent] = useState("");
 
   const handleSubmit = async () => {
     if (!versaoAntiga.trim() || !versaoNova.trim()) return;
@@ -44,6 +45,7 @@ export default function ComparadorContratos() {
     setResult(null);
     try {
       const userContent = `VERSÃO ANTERIOR:\n${versaoAntiga}\n\nVERSÃO NOVA:\n${versaoNova}`;
+      setLastContent(userContent);
       const res = await callClaude(systemPrompt, userContent);
       setResult(cleanResult(res));
     } catch (e) {
@@ -52,6 +54,12 @@ export default function ComparadorContratos() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEdit = async (previousResult, editInstruction) => {
+    if (editInstruction === "__RESTORE__") { setResult(previousResult); return; }
+    const res = await callClaudeEdit(systemPrompt, lastContent, previousResult, editInstruction);
+    setResult(cleanResult(res));
   };
 
   return (
@@ -116,7 +124,7 @@ export default function ComparadorContratos() {
       </button>
 
       {loading && <LoadingSpinner />}
-      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setVersaoAntiga(""); setVersaoNova(""); setOldUploaded(false); setNewUploaded(false); setError(null); setValidation(null); }} />}
+      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setVersaoAntiga(""); setVersaoNova(""); setOldUploaded(false); setNewUploaded(false); setError(null); setValidation(null); }} onEdit={handleEdit} />}
     </div>
   );
 }

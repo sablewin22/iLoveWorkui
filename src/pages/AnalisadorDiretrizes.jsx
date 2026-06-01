@@ -7,7 +7,7 @@ import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorAlert from "../components/ErrorAlert";
-import { callClaude } from "../services/claudeApi";
+import { callClaude, callClaudeEdit } from "../services/claudeApi";
 import { validateContent } from "../services/validateContent";
 
 const systemPrompt = "Você é um especialista em compliance. Analise o documento (política interna, regulamento ou manual). Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
@@ -75,6 +75,12 @@ export default function AnalisadorDiretrizes() {
     }
   };
 
+  const handleEdit = async (previousResult, editInstruction) => {
+    if (editInstruction === "__RESTORE__") { setResult(previousResult); return; }
+    const res = await callClaudeEdit(systemPrompt, text, previousResult, editInstruction);
+    setResult(cleanResult(res));
+  };
+
   return (
     <div className="tool-container pt-24">
       <button onClick={() => navigate("/")} className="btn-ghost flex items-center gap-2 text-sm mb-6">
@@ -112,7 +118,7 @@ export default function AnalisadorDiretrizes() {
       </div>
 
       {loading && <LoadingSpinner />}
-      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setText(""); setUploadedFile(null); setError(null); setValidation(null); setTab("upload"); }} />}
+      {result && <ResultBox content={result} onNewAnalysis={() => { setResult(null); setText(""); setUploadedFile(null); setError(null); setValidation(null); setTab("upload"); }} onEdit={handleEdit} />}
     </div>
   );
 }

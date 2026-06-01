@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Copy, Check, RotateCcw, FileDown } from "lucide-react";
+import { Copy, Check, RotateCcw, FileDown, Pencil, X, ChevronDown, ChevronRight, History } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 function markdownToHtml(md) {
@@ -20,8 +20,56 @@ function markdownToHtml(md) {
   return `<p>${html}</p>`;
 }
 
-export default function ResultBox({ content, onNewAnalysis }) {
+const MAX_ITERATIONS = 5;
+
+export default function ResultBox({ content, onNewAnalysis, onEdit }) {
   const [copied, setCopied] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editInstruction, setEditInstruction] = useState("");
+  const [editLoading, setEditLoading] = useState(false);
+  const [editHistory, setEditHistory] = useState([]);
+  const [iterationCount, setIterationCount] = useState(0);
+  const [showHistory, setShowHistory] = useState(false);
+  const [editError, setEditError] = useState(null);
+
+  const handleApplyEdit = async () => {
+    if (!editInstruction.trim() || !onEdit) return;
+    setEditLoading(true);
+    setEditError(null);
+    try {
+      setEditHistory(prev => [...prev, { version: iterationCount + 1, content, instruction: editInstruction }]);
+      setIterationCount(prev => prev + 1);
+      await onEdit(content, editInstruction);
+      setEditInstruction("");
+    } catch (e) {
+      setEditError(e.message || "Erro ao aplicar edição");
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
+  const handleRegenerate = () => {
+    if (onNewAnalysis) onNewAnalysis();
+    setEditing(false);
+    setEditInstruction("");
+    setEditHistory([]);
+    setIterationCount(0);
+    setShowHistory(false);
+    setEditError(null);
+  };
+
+  const handleDismissEdit = () => {
+    setEditing(false);
+    setEditInstruction("");
+    setEditError(null);
+  };
+
+  const handleRestoreVersion = (versionContent) => {
+    onEdit(versionContent, "__RESTORE__");
+    setEditing(false);
+    setEditInstruction("");
+    setEditError(null);
+  };
 
   const handleCopy = async () => {
     try {
@@ -150,10 +198,99 @@ export default function ResultBox({ content, onNewAnalysis }) {
         <button onClick={handleDownloadPdf} className="btn-ghost flex items-center gap-2 text-sm">
           <FileDown className="w-4 h-4" /> Baixar como PDF
         </button>
+        {!editing && (
+          <button onClick={() => { setEditing(true); setEditError(null); }} className="btn-ghost flex items-center gap-2 text-sm">
+            <Pencil className="w-4 h-4" /> Editar resultado
+          </button>
+        )}
         <button onClick={onNewAnalysis} className="btn-ghost flex items-center gap-2 text-sm">
           <RotateCcw className="w-4 h-4" /> Nova análise
         </button>
       </div>
+
+      {editing && onEdit && (
+        <div className="mt-6 pt-4 border-t border-accent/20 space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="font-title font-semibold text-sm text-accent flex items-center gap-1.5">
+              <Pencil className="w-3.5 h-3.5" /> Editar resultado
+              {iterationCount > 0 && (
+                <span className="text-xs text-light/50 font-normal">({iterationCount}/{MAX_ITERATIONS} edições)</span>
+              )}
+            </h4>
+            <button onClick={handleDismissEdit} className="text-light/40 hover:text-light/70 transition-colors">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <textarea
+            value={editInstruction}
+            onChange={(e) => setEditInstruction(e.target.value)}
+            placeholder="Descreva a alteração que deseja fazer..."
+            rows={2}
+            className="input-field resize-y text-sm"
+            disabled={editLoading || iterationCount >= MAX_ITERATIONS}
+          />
+
+          {editError && (
+            <p className="text-red-500 text-xs">{editError}</p>
+          )}
+
+          <div className="flex flex-wrap gap-2">
+            {iterationCount < MAX_ITERATIONS && (
+              <button
+                onClick={handleApplyEdit}
+                disabled={!editInstruction.trim() || editLoading}
+                className="btn-accent text-sm px-4 py-1.5"
+              >
+                {editLoading ? "Aplicando..." : "Aplicar alteração"}
+              </button>
+            )}
+            {iterationCount < MAX_ITERATIONS && (
+              <button onClick={handleRegenerate} className="btn-ghost text-sm px-4 py-1.5">
+                <RotateCcw className="w-3.5 h-3.5 mr-1.5" /> Gerar nova versão
+              </button>
+            )}
+            <button onClick={handleDismissEdit} className="btn-ghost text-sm px-4 py-1.5 text-green-600">
+              Está ótimo ✓
+            </button>
+          </div>
+
+          {iterationCount >= MAX_ITERATIONS && (
+            <p className="text-amber-600 text-xs">Máximo de {MAX_ITERATIONS} edições atingido.</p>
+          )}
+
+          {editHistory.length > 0 && (
+            <div className="pt-2">
+              <button
+                onClick={() => setShowHistory(!showHistory)}
+                className="flex items-center gap-1.5 text-xs text-light/50 hover:text-light/70 transition-colors"
+              >
+                {showHistory ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+                <History className="w-3 h-3" /> Histórico de edições ({editHistory.length})
+              </button>
+              {showHistory && (
+                <div className="mt-2 space-y-1.5 max-h-48 overflow-y-auto">
+                  {[...editHistory].reverse().map((item, idx) => (
+                    <div key={item.version} className="flex items-start gap-2 p-2 rounded-lg bg-black/[0.02] border border-black/5 text-xs">
+                      <span className="text-accent font-medium shrink-0 mt-0.5">#{item.version}</span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-light/50 truncate">{item.instruction}</p>
+                      </div>
+                      <button
+                        onClick={() => handleRestoreVersion(item.content)}
+                        className="text-accent hover:underline shrink-0 mt-0.5"
+                        title="Restaurar esta versão"
+                      >
+                        Restaurar
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

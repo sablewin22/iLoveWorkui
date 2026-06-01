@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Calculator } from "lucide-react";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { callClaude } from "../services/claudeApi";
+import { callClaude, callClaudeEdit } from "../services/claudeApi";
 import RequiredField from "../components/RequiredField";
 import ErrorAlert from "../components/ErrorAlert";
 
@@ -39,31 +39,15 @@ export default function SimuladorRescisao() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
+  const [lastContent, setLastContent] = useState("");
+
+  const handleEdit = async (previousResult, editInstruction) => {
+    if (editInstruction === "__RESTORE__") { setResult(previousResult); return; }
+    const res = await callClaudeEdit("Você é um especialista em direito trabalhista e cálculos rescisórios. Calcule os valores estimados de rescisão conforme a CLT. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.", lastContent, previousResult, editInstruction);
+    setResult(cleanResult(res));
+  };
 
   const isFormValid = form.salario && form.dataAdmissao && form.dataDemissao && form.motivo;
-
-  const update = (field) => (e) => setForm({ ...form, [field]: e.target.value });
-
-  const handleSubmit = async () => {
-    if (!form.salario || !form.dataAdmissao || !form.dataDemissao || !form.motivo) return;
-    setLoading(true);
-    setError(null);
-    setResult(null);
-
-    const userContent = `Salário: ${form.salario}\nData de Admissão: ${form.dataAdmissao}\nData de Demissão: ${form.dataDemissao}\nMotivo: ${form.motivo}\nAviso Prévio: ${form.avisoPrevio === "true" ? "Sim" : "Não"}\nTipo de Contrato: ${form.tipoContrato}`;
-
-    const systemPrompt = "Você é um especialista em direito trabalhista e cálculos rescisórios. Calcule os valores estimados de rescisão conforme a CLT. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
-
-    try {
-      const res = await callClaude(systemPrompt, userContent);
-      setResult(cleanResult(res));
-    } catch (e) {
-      setError(e.message);
-      setSuggestions(e.suggestions || []);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="tool-container pt-24">
@@ -124,7 +108,7 @@ export default function SimuladorRescisao() {
 
       {loading && <LoadingSpinner />}
       {result && (
-        <ResultBox content={result} onNewAnalysis={() => { setResult(null); setForm({ salario: "", dataAdmissao: "", dataDemissao: "", motivo: "", avisoPrevio: "false", tipoContrato: "CLT" }); setError(null); }} />
+        <ResultBox content={result} onNewAnalysis={() => { setResult(null); setForm({ salario: "", dataAdmissao: "", dataDemissao: "", motivo: "", avisoPrevio: "false", tipoContrato: "CLT" }); setError(null); }} onEdit={handleEdit} />
       )}
     </div>
   );
