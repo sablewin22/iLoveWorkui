@@ -6,11 +6,13 @@ async function callApi(endpoint, body) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || `Erro na API (${res.status})`);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.success) {
+    const err = new Error(data.error || `Erro na API (${res.status})`);
+    err.suggestions = data.suggestions || [];
+    throw err;
   }
-  return res.json();
+  return data;
 }
 
 export async function callClaude(systemPrompt, userContent, replacements = {}) {

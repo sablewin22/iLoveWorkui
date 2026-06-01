@@ -5,6 +5,7 @@ import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { callClaude } from "../services/claudeApi";
 import RequiredField from "../components/RequiredField";
+import ErrorAlert from "../components/ErrorAlert";
 
 const tiposContrato = [
   "Freelance",
@@ -57,6 +58,7 @@ export default function CriadorContrato() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
 
   const isFormValid = form.tipo && form.parteA && form.parteB && form.objeto;
 
@@ -100,6 +102,7 @@ export default function CriadorContrato() {
       setResult(cleanResult(res));
     } catch (e) {
       setError(e.message);
+      setSuggestions(e.suggestions || []);
     } finally {
       setLoading(false);
     }
@@ -184,7 +187,7 @@ export default function CriadorContrato() {
           </div>
         )}
 
-        {error && <p className="text-red-400 text-sm mt-4">{error}</p>}
+        <ErrorAlert message={error} suggestions={suggestions} />
 
         <button onClick={handleSubmit} disabled={!isFormValid || loading} className="btn-accent w-full mt-4">
           {loading ? "Gerando..." : "Gerar Contrato"}

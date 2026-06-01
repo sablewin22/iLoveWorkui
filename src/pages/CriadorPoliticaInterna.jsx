@@ -5,6 +5,7 @@ import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { callClaude } from "../services/claudeApi";
 import RequiredField from "../components/RequiredField";
+import ErrorAlert from "../components/ErrorAlert";
 
 function cleanResult(text) {
   return text
@@ -28,6 +29,7 @@ export default function CriadorPoliticaInterna() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
 
   const isFormValid = form.nomePolitica && form.empresa && form.objetivo;
 
@@ -48,6 +50,7 @@ export default function CriadorPoliticaInterna() {
       setResult(cleanResult(res));
     } catch (e) {
       setError(e.message);
+      setSuggestions(e.suggestions || []);
     } finally {
       setLoading(false);
     }
@@ -101,7 +104,7 @@ export default function CriadorPoliticaInterna() {
           <input value={form.responsaveis} onChange={update("responsaveis")} placeholder="Ex: Gestores, RH, Compliance" className="input-field" />
         </div>
 
-        {error && <p className="text-red-400 text-sm mt-4">{error}</p>}
+        <ErrorAlert message={error} suggestions={suggestions} />
 
         <button onClick={handleSubmit} disabled={!isFormValid || loading} className="btn-accent w-full mt-4">
           {loading ? "Criando Política..." : "Criar Política Interna"}

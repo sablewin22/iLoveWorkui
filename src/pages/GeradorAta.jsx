@@ -6,6 +6,7 @@ import FileUpload from "../components/FileUpload";
 import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorAlert from "../components/ErrorAlert";
 import { callClaude } from "../services/claudeApi";
 import { validateContent } from "../services/validateContent";
 
@@ -26,6 +27,7 @@ export default function GeradorAta() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
   const [validation, setValidation] = useState(null);
 
   const handleFileContent = (content, fileName) => {
@@ -66,6 +68,7 @@ export default function GeradorAta() {
       setResult(cleanResult(res));
     } catch (e) {
       setError(e.message);
+      setSuggestions(e.suggestions || []);
     } finally {
       setLoading(false);
     }
@@ -109,7 +112,7 @@ export default function GeradorAta() {
             )}
           </p>
         )}
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        <ErrorAlert message={error} suggestions={suggestions} />
 
         <button onClick={handleSubmit} disabled={!text.trim() || loading} className="btn-accent w-full">
           {loading ? "Gerando Ata..." : "Gerar Ata"}

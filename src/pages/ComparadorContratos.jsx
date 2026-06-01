@@ -5,6 +5,7 @@ import FileUpload from "../components/FileUpload";
 import TextInput from "../components/TextInput";
 import ResultBox from "../components/ResultBox";
 import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorAlert from "../components/ErrorAlert";
 import { callClaude } from "../services/claudeApi";
 import { validateContent } from "../services/validateContent";
 
@@ -26,6 +27,7 @@ export default function ComparadorContratos() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
   const [validation, setValidation] = useState(null);
   const [oldUploaded, setOldUploaded] = useState(false);
   const [newUploaded, setNewUploaded] = useState(false);
@@ -46,6 +48,7 @@ export default function ComparadorContratos() {
       setResult(cleanResult(res));
     } catch (e) {
       setError(e.message);
+      setSuggestions(e.suggestions || []);
     } finally {
       setLoading(false);
     }
@@ -106,7 +109,7 @@ export default function ComparadorContratos() {
           )}
         </p>
       )}
-      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+      <ErrorAlert message={error} suggestions={suggestions} />
 
       <button onClick={handleSubmit} disabled={!versaoAntiga.trim() || !versaoNova.trim() || loading} className="btn-accent w-full mb-8">
         {loading ? "Comparando..." : "Comparar Contratos"}
