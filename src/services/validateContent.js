@@ -141,11 +141,14 @@ export function validateContent(text, toolId) {
     dados_empresariais: ["balanço patrimonial", "demonstrativo de resultado"],
     tradutor: ["juridiquês"],
   };
-  const ids = strongIds[toolId];
-  if (ids && ids.some(k => lower.includes(k))) return null;
 
-  const matchScore = score(lower, rule.matches);
+  let matchScore = score(lower, rule.matches);
   const mismatchScore = score(lower, rule.mismatches);
+
+  const ids = strongIds[toolId];
+  if (ids && ids.some(k => lower.includes(k))) {
+    matchScore += 2;
+  }
 
   if (mismatchScore > matchScore && mismatchScore >= 1) {
     const detectedType = findBestMatchingType(lower, toolId);
