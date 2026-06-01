@@ -107,7 +107,7 @@ export default function AnalisadorDadosEmpresariais() {
         )}
 
         {validation && (
-          <p className="text-green-700 text-sm bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+          <p className="text-amber-600 text-sm bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
             <span dangerouslySetInnerHTML={{ __html: validation.message }} />
             {validation.suggestionPath && (
               <button onClick={() => navigate(validation.suggestionPath)} className="underline font-medium ml-1">Ir para ferramenta</button>
@@ -116,7 +116,7 @@ export default function AnalisadorDadosEmpresariais() {
         )}
         <ErrorAlert message={error} suggestions={suggestions} />
 
-        <button onClick={handleSubmit} disabled={!text.trim() || loading} className="btn-accent w-full">
+        <button onClick={handleSubmit} disabled={!text.trim() || loading || (validation && validation.suggestionPath)} className="btn-accent w-full">
           {loading ? "Analisando..." : "Analisar Dados"}
         </button>
       </div>
