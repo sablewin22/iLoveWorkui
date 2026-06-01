@@ -131,6 +131,8 @@ export function validateContent(text, toolId) {
   const rule = rules[toolId];
   if (!rule) return null;
 
+  if (toolId === "curriculo") return null;
+
   const lower = text.toLowerCase();
   if (lower.length < 20) {
     return {
@@ -141,7 +143,6 @@ export function validateContent(text, toolId) {
   }
 
   const strongIds = {
-    curriculo: ["currículo", "curriculo", "curriculum vitae", "cv"],
     contrato: ["contratante", "contratado"],
     diretrizes: ["código de ética", "codigo de etica", "política de compliance", "politica de compliance"],
     ata: ["ata de reunião", "ata da reunião"],
