@@ -6,7 +6,7 @@ const rules = {
       "graduação", "graduacao", "cargo", "habilidade", "competência", "competencia",
       "resumo profissional", "formação acadêmica", "formacao academica",
       "qualificações", "qualificacoes",
-      "publicações", "publicacoes",
+      "publicações", "publicacoes", "publications",
       "professeur", "professor", "enseignement", "teaching",
       "expérience", "experience", "formation", "education",
       "recherche", "research", "projets", "projeto", "project",
