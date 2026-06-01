@@ -52,6 +52,8 @@ export default function TradutorJuridico() {
     setUploadedFile({ name: fileName, content });
   };
 
+  const handleTextChange = (v) => { setText(v); const check = validateContent(v, "contrato"); setValidation(check && check.type === "warning" ? check : null); };
+
   const handleSubmit = async () => {
     if (!text.trim()) return;
     const v = validateContent(text, "contrato");
@@ -101,7 +103,7 @@ export default function TradutorJuridico() {
         {tab === "upload" ? (
           <FileUpload onFileContent={handleFileContent} />
         ) : (
-          <TextInput value={text} onChange={setText} placeholder="Cole o texto aqui..." />
+          <TextInput value={text} onChange={handleTextChange} placeholder="Cole o texto aqui..." />
         )}
 
         {validation && (

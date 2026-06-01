@@ -52,6 +52,8 @@ export default function AnalisadorDadosEmpresariais() {
     setUploadedFile({ name: fileName, content });
   };
 
+  const handleTextChange = (v) => { setText(v); const check = validateContent(v, "dados_empresariais"); setValidation(check && check.type === "warning" ? check : null); };
+
   const handleSubmit = async () => {
     if (!text.trim()) return;
     const v = validateContent(text, "dados_empresariais");
@@ -101,7 +103,7 @@ export default function AnalisadorDadosEmpresariais() {
         {tab === "upload" ? (
           <FileUpload onFileContent={handleFileContent} />
         ) : (
-          <TextInput value={text} onChange={setText} placeholder="Cole os dados empresariais aqui (financeiros, operacionais, indicadores...)" />
+          <TextInput value={text} onChange={handleTextChange} placeholder="Cole os dados empresariais aqui (financeiros, operacionais, indicadores...)" />
         )}
 
         {validation && (

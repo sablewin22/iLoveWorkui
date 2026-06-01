@@ -52,6 +52,8 @@ export default function GeradorAta() {
     setUploadedFile({ name: fileName, content });
   };
 
+  const handleTextChange = (v) => { setText(v); const check = validateContent(v, "ata"); setValidation(check && check.type === "warning" ? check : null); };
+
   const handleSubmit = async () => {
     if (!text.trim()) return;
     const v = validateContent(text, "ata");
@@ -101,7 +103,7 @@ export default function GeradorAta() {
         {tab === "upload" ? (
           <FileUpload onFileContent={handleFileContent} />
         ) : (
-          <TextInput value={text} onChange={setText} placeholder="Cole as anotações da reunião aqui (participantes, tópicos discutidos, decisões...)" />
+          <TextInput value={text} onChange={handleTextChange} placeholder="Cole as anotações da reunião aqui (participantes, tópicos discutidos, decisões...)" />
         )}
 
         {validation && (

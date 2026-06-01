@@ -54,7 +54,7 @@ export default function AnalisadorCurriculo() {
     setUploadedFile({ name: fileName, content });
   };
 
-  const handleTextChange = (v) => { setText(v); setValidation(null); };
+  const handleTextChange = (v) => { setText(v); const check = validateContent(v, "curriculo"); setValidation(check && check.type === "warning" ? check : null); };
 
   const handleSubmit = async () => {
     if (!text.trim()) return;

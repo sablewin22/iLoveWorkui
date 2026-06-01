@@ -54,6 +54,8 @@ export default function AnalisadorDiretrizes() {
     setUploadedFile({ name: fileName, content });
   };
 
+  const handleTextChange = (v) => { setText(v); const check = validateContent(v, "diretrizes"); setValidation(check && check.type === "warning" ? check : null); };
+
   const handleSubmit = async () => {
     if (!text.trim()) return;
     const v = validateContent(text, "diretrizes");
@@ -91,7 +93,7 @@ export default function AnalisadorDiretrizes() {
         {tab === "upload" ? (
           <FileUpload onFileContent={handleFileContent} />
         ) : (
-          <TextInput value={text} onChange={setText} placeholder="Cole o texto da política, regulamento ou manual aqui..." />
+          <TextInput value={text} onChange={handleTextChange} placeholder="Cole o texto da política, regulamento ou manual aqui..." />
         )}
 
         {validation && (

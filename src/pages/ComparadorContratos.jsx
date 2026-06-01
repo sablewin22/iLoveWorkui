@@ -81,7 +81,7 @@ export default function ComparadorContratos() {
               <button onClick={() => { setVersaoAntiga(""); setOldUploaded(false); }} className="text-red-500 hover:text-red-700 underline ml-auto">Remover</button>
             </div>
           )}
-          <TextInput value={versaoAntiga} onChange={(v) => { setVersaoAntiga(v); if (!v) setOldUploaded(false); }} placeholder="Ou cole o texto aqui..." />
+          <TextInput value={versaoAntiga} onChange={(v) => { setVersaoAntiga(v); if (!v) setOldUploaded(false); const check = validateContent(v, "contrato"); setValidation(check && check.type === "warning" ? check : null); }} placeholder="Ou cole o texto aqui..." />
         </div>
         <div className="space-y-3">
           <label className="block text-sm font-medium text-light/80">Versão Nova</label>
@@ -97,7 +97,7 @@ export default function ComparadorContratos() {
               <button onClick={() => { setVersaoNova(""); setNewUploaded(false); }} className="text-red-500 hover:text-red-700 underline ml-auto">Remover</button>
             </div>
           )}
-          <TextInput value={versaoNova} onChange={(v) => { setVersaoNova(v); if (!v) setNewUploaded(false); }} placeholder="Ou cole o texto aqui..." />
+          <TextInput value={versaoNova} onChange={(v) => { setVersaoNova(v); if (!v) setNewUploaded(false); const check = validateContent(v, "contrato"); setValidation(check && check.type === "warning" ? check : null); }} placeholder="Ou cole o texto aqui..." />
         </div>
       </div>
 

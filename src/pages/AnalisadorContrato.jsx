@@ -45,7 +45,7 @@ export default function AnalisadorContrato() {
     setUploadedFile({ name: fileName, content });
   };
 
-  const handleTextChange = (v) => { setText(v); setValidation(null); };
+  const handleTextChange = (v) => { setText(v); const check = validateContent(v, "contrato"); setValidation(check && check.type === "warning" ? check : null); };
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
