@@ -131,8 +131,6 @@ export function validateContent(text, toolId) {
   const rule = rules[toolId];
   if (!rule) return null;
 
-  if (toolId === "curriculo") return null;
-
   const lower = text.toLowerCase();
   if (lower.length < 20) {
     return {
