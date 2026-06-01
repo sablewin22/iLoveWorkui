@@ -134,10 +134,10 @@ export function validateContent(text, toolId) {
   }
 
   const strongIds = {
-    curriculo: ["currículo", "curriculo", "pesquisa"],
+    curriculo: ["currículo", "curriculo"],
     contrato: ["contratante", "contratado"],
-    diretrizes: ["código de ética", "codigo de etica"],
-    ata: ["ata de reunião"],
+    diretrizes: ["código de ética", "codigo de etica", "política de compliance", "politica de compliance"],
+    ata: ["ata de reunião", "ata da reunião"],
     dados_empresariais: ["balanço patrimonial", "demonstrativo de resultado"],
     tradutor: ["juridiquês"],
   };
