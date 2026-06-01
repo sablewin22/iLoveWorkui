@@ -15,6 +15,7 @@ const rules = {
       "compliance", "diretriz", "política interna", "norma",
       "procedimento", "regulamento", "conduta", "manual",
       "balanço", "indicador", "dívida", "financeiro",
+      "aprendizado", "aprendizagem", "lição", "lições",
     ],
     suggestion: "Analisador de Currículo",
     suggestionPath: "/analisador-curriculo",
