@@ -4,9 +4,9 @@ const rules = {
       "currículo", "curriculo", "curriculum vitae", "cv", "resume",
       "experiência", "experiencia", "formação", "formacao",
       "graduação", "graduacao", "cargo", "habilidade", "competência", "competencia",
-      "idioma", "resumo profissional", "formação acadêmica", "formacao academica",
-      "objetivo", "qualificações", "qualificacoes",
-      "publicações", "publicacoes", "pesquisa", "orientação", "orientacao",
+      "resumo profissional", "formação acadêmica", "formacao academica",
+      "qualificações", "qualificacoes",
+      "publicações", "publicacoes",
     ],
     mismatches: [
       "cláusula", "clausula", "foro", "rescisão", "rescisao", "vigência", "vigencia",
@@ -150,7 +150,7 @@ export function validateContent(text, toolId) {
     matchScore += 2;
   }
 
-  if (mismatchScore > matchScore && mismatchScore >= 1) {
+  if (mismatchScore >= matchScore && mismatchScore >= 1) {
     const detectedType = findBestMatchingType(lower, toolId);
     const target = rules[detectedType] || rule;
     return {
