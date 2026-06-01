@@ -7,6 +7,12 @@ const rules = {
       "resumo profissional", "formação acadêmica", "formacao academica",
       "qualificações", "qualificacoes",
       "publicações", "publicacoes",
+      "professeur", "professor", "enseignement", "teaching",
+      "expérience", "experience", "formation", "education",
+      "recherche", "research", "projets", "projeto", "project",
+      "distinctions", "langues", "languages",
+      "doctorat", "doutorado", "phd", "master", "licence",
+      "université", "universidade", "university",
     ],
     mismatches: [
       "cláusula", "clausula", "foro", "rescisão", "rescisao", "vigência", "vigencia",
