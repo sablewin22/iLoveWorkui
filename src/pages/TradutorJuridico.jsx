@@ -107,7 +107,7 @@ export default function TradutorJuridico() {
         )}
 
         {validation && (
-          <p className="text-amber-600 text-sm bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+          <p className="text-green-700 text-sm bg-green-50 border border-green-200 rounded-lg px-4 py-3">
             <span dangerouslySetInnerHTML={{ __html: validation.message }} />
             {validation.suggestionPath && (
               <button onClick={() => navigate(validation.suggestionPath)} className="underline font-medium ml-1">Ir para ferramenta</button>
