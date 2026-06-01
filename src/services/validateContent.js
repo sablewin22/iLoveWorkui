@@ -135,7 +135,7 @@ export function validateContent(text, toolId) {
   }
 
   const strongIds = {
-    curriculo: ["currículo", "curriculo"],
+    curriculo: ["currículo", "curriculo", "curriculum vitae", "cv"],
     contrato: ["contratante", "contratado"],
     diretrizes: ["código de ética", "codigo de etica", "política de compliance", "politica de compliance"],
     ata: ["ata de reunião", "ata da reunião"],
@@ -143,13 +143,13 @@ export function validateContent(text, toolId) {
     tradutor: ["juridiquês"],
   };
 
-  let matchScore = score(lower, rule.matches);
-  const mismatchScore = score(lower, rule.mismatches);
-
   const ids = strongIds[toolId];
   if (ids && ids.some(k => lower.includes(k))) {
-    matchScore += 2;
+    return null;
   }
+
+  let matchScore = score(lower, rule.matches);
+  const mismatchScore = score(lower, rule.mismatches);
 
   if (mismatchScore >= matchScore && mismatchScore >= 1) {
     const detectedType = findBestMatchingType(lower, toolId);
