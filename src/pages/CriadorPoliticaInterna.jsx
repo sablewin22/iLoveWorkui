@@ -32,6 +32,30 @@ export default function CriadorPoliticaInterna() {
   const [suggestions, setSuggestions] = useState([]);
   const [lastContent, setLastContent] = useState("");
 
+  const update = (field) => (e) => setForm({ ...form, [field]: e.target.value });
+
+  const handleSubmit = async () => {
+    if (!form.nomePolitica || !form.empresa || !form.objetivo) return;
+    setLoading(true);
+    setError(null);
+    setResult(null);
+
+    const userContent = `Nome da Política: ${form.nomePolitica}\nEmpresa: ${form.empresa}\nSetor: ${form.setor}\nObjetivo: ${form.objetivo}\nRegras sugeridas: ${form.regras}\nResponsáveis: ${form.responsaveis}`;
+    setLastContent(userContent);
+
+    const systemPrompt = "Você é um especialista em gestão empresarial e criação de políticas internas. Crie um documento de política interna personalizado. Adapte a linguagem ao perfil da empresa. Estruture regras claras e defina responsabilidades. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.";
+
+    try {
+      const res = await callClaude(systemPrompt, userContent);
+      setResult(cleanResult(res));
+    } catch (e) {
+      setError(e.message);
+      setSuggestions(e.suggestions || []);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleEdit = async (previousResult, editInstruction) => {
     if (editInstruction === "__RESTORE__") { setResult(previousResult); return; }
     const res = await callClaudeEdit("Você é um especialista em gestão empresarial e criação de políticas internas. Crie um documento de política interna personalizado. Adapte a linguagem ao perfil da empresa. Estruture regras claras e defina responsabilidades. Use APENAS tópicos com \"-\" e **negrito**. NUNCA use \"---\" ou \"////\" ou \"===\" ou \"***\". Responda em português brasileiro.", lastContent, previousResult, editInstruction);
